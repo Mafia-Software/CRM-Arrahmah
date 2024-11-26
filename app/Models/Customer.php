@@ -15,4 +15,5 @@ class Customer extends Model
         'response',
 
     ];
+
 }

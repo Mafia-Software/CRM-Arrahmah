@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CustomerResource\Pages;
@@ -42,12 +43,19 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make('id')->sortable()->searchable(),
+                TextColumn::make('nama')->sortable()->searchable(),
+                TextColumn::make('alamat')->sortable()->searchable(),
+                TextColumn::make('no_wa')->sortable()->searchable(),
+                TextColumn::make('unit_kerja')->sortable()->searchable(),
+                TextColumn::make('response')->sortable()->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
