@@ -9,6 +9,7 @@ class UnitKerja extends Model
     //
     protected $fillable = [
         'id',
-        'unit_kerja',
+        'name',
+        'description',
     ];
 }

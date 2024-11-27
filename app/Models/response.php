@@ -9,6 +9,7 @@ class Response extends Model
     //
     protected $fillable = [
         'id',
-        'response'
+        'name',
+        'code'
     ];
 }
