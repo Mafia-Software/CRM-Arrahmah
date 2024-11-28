@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,9 +31,12 @@ class CustomerResource extends Resource
                     ->schema([
                         TextInput::make('nama')->required(),
                         TextInput::make('alamat')->required(),
-                        TextInput::make('no_wa')->required(),
-                        TextInput::make('unit_kerja')->required(),
-                        TextInput::make('response')->required(),
+                        TextInput::make('no_wa')->required()->label('No. Whatsapp'),
+                        Select::make('unit_kerja')
+                        ->label('Unit Kerja')
+                            ->relationship('UnitKerja', 'unit_kerja'),
+                        Select::make('response')
+                            ->relationship('Response', 'response'),
                     ])
                     ->columns(2),
             ]);
