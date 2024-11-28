@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('unit_kerjas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
