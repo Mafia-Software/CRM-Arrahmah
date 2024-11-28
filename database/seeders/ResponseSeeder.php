@@ -15,7 +15,7 @@ class ResponseSeeder extends Seeder
     {
         //
         $data = [
-            ['response'=>'Oke'],
+            ['name' => 'Oke'],
 
         ];
 

@@ -15,12 +15,12 @@ class UnitKerjaSeeder extends Seeder
     {
         //
         $data = [
-            ['unit_kerja'=>'bangkalan'],
-            ['unit_kerja'=>'Surabaya'],
-            ['unit_kerja'=>'Sampang'],
-            ['unit_kerja'=>'Sidoarjo'],
+            ['name' => 'bangkalan'],
+            ['name' => 'Surabaya'],
+            ['name' => 'Sampang'],
+            ['name' => 'Sidoarjo'],
         ];
 
-        DB::table('unit_kerja')->insert($data);
+        DB::table('unit_kerjas')->insert($data);
     }
 }
