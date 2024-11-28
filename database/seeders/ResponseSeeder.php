@@ -19,6 +19,6 @@ class ResponseSeeder extends Seeder
 
         ];
 
-        DB::table('response')->insert($data);
+        DB::table('responses')->insert($data);
     }
 }
