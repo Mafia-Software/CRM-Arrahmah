@@ -28,7 +28,7 @@ class UnitKerjaResource extends Resource
             //
             Section::make('Input Unit Kerja')
                 ->description('')
-                ->schema([TextInput::make('id')->required()->unique(), TextInput::make('unit_kerja')->required()])
+                ->schema([TextInput::make('name')->required()->label('Unit kerja'), TextInput::make('description')->label('Description')->nullable()])
                 ->columns(2),
         ]);
     }
@@ -39,7 +39,8 @@ class UnitKerjaResource extends Resource
             ->columns([
                 //
                 TextColumn::make('id')->sortable()->searchable(),
-                TextColumn::make('unit_kerja')->sortable()->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('description')->sortable()->searchable(),
             ])
             ->filters([
                 //
