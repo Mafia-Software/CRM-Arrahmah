@@ -14,6 +14,6 @@ class Response extends Model
     ];
 
     public function customer(){
-        return $this->hasMany(Customer::class, 'response');
+        return $this->hasMany(Customer::class);
     }
 }
