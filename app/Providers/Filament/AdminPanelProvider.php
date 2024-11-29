@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, fn () => view('components.topbarend'))
             ->renderHook(PanelsRenderHook::TOPBAR_START, fn () => view('components.topbarstart'))
+            ->RenderHook(PanelsRenderHook::SIDEBAR_NAV_END, fn () => view('components.sidebarend'))
 
             ->viteTheme('resources/css/filament/admin/theme.css');
     }
