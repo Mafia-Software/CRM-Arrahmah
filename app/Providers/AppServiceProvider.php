@@ -22,16 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->afterResolving(Factory::class, function (Factory $factory) {
-            $factory->add('custom', [
-                'path' => resource_path('svg'),
-                'prefix' => 'custom',
-            ]);
-        });
-        Filament::registerRenderHook(
-            'filament.sidebar.items',
-            fn () => view('custom-navigation-icon'),
-        );
+
     }
 }
 
