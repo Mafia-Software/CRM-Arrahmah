@@ -1,0 +1,56 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+
+
+@layer base {
+    :root.dark .fi-breadcrumbs-list {
+        background-color: #000000d0; /* Warna biru */
+    }
+    :root.dark .fi-sidebar-nav {
+    background-color: #420570!important;
+    }
+    :root.dark .fi-sidebar-header{
+    background-color:  #591f86;
+    }
+.fi-topbar{
+    background-color: gold !important;
+}
+
+}
+
+
+
+
+.fi-breadcrumbs-list {background-color: white;}
+
+
+
+.fi-sidebar-nav {
+    background-color: #913fcf!important;
+
+}
+.fi-sidebar-header{
+    background-color:  #8030bd;
+}
+
+
+
+@layer base {
+    :root.dark .fi-sidebar-item-label {
+        color: rgb(255, 255, 255) ;  /* Warna biru */
+    }
+}
+
+
+
+.fi-sidebar-item-label.fi-active{
+    color: rgb(0, 0, 0) !important; /* Warna hitam */
+}
+
+
+
+.fi-sidebar-item-icon {
+    font-size: 2rem; /* Ukuran ikon 2x dari ukuran default */
+}

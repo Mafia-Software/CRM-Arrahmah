@@ -20,7 +20,7 @@ class UnitKerjaResource extends Resource
 {
     protected static ?string $model = UnitKerja::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'bi-envelope-paper';
 
     public static function form(Form $form): Form
     {

@@ -17,7 +17,7 @@ class ResponseResource extends Resource
 {
     protected static ?string $model = Response::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'bi-graph-up-arrow';
 
     public static function form(Form $form): Form
     {
