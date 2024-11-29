@@ -8,6 +8,7 @@ class Customer extends Model
 {
     //
         protected $fillable = [
+            'id',
         'nama',
         'alamat',
         'no_wa',
@@ -18,10 +19,10 @@ class Customer extends Model
 
     public function unitKerja () {
         
-        return $this->belongsTo(UnitKerja::class, 'unit_kerja');
+        return $this->belongsTo(UnitKerja::class);
     }
 
     public function response() {
-        return $this->belongsTo(Response::class, 'response');
+        return $this->belongsTo(Response::class);
     }
 }
