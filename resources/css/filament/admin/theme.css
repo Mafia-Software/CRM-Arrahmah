@@ -17,9 +17,9 @@
     background-color: white;
 }
 .fi-sidebar {
-    width: 200px; /* Ubah lebar sesuai keinginan, misalnya 300px */
-    max-width: 300px; /* Tambahkan jika ingin membatasi lebar maksimum */
-    min-width: 200px; /* Tambahkan jika ingin membatasi lebar minimum */
+    width: 200px;
+    max-width: 300px;
+    min-width: 200px;
 }
 
 
@@ -30,7 +30,7 @@
     height: 100vh;
     overflow-y: hidden;
     overflow-x: hidden;
-    padding: 0;
+    padding-top: 30;
     margin: 0;
 }
 
@@ -103,3 +103,6 @@
     margin: 0;
 }
 
+.fi-topbar .fi-user-menu {
+    display: none !important;
+}
