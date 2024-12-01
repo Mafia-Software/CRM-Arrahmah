@@ -16,9 +16,22 @@
 .fi-breadcrumbs-list {
     background-color: white;
 }
+.fi-sidebar {
+    width: 200px; /* Ubah lebar sesuai keinginan, misalnya 300px */
+    max-width: 300px; /* Tambahkan jika ingin membatasi lebar maksimum */
+    min-width: 200px; /* Tambahkan jika ingin membatasi lebar minimum */
+}
+
 
 .fi-sidebar-nav {
     background-color: #913fcf !important;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
 }
 
 .fi-sidebar-header {
@@ -44,11 +57,11 @@
 }
 
 .fi-sidebar-item-icon {
-    font-size: 2rem;
-    height: 80px;
+    font-size: 1rem;
+    height: 60px;
     width: 80px;
     color: #000;
-    padding-left: 20px;
+    padding-left: 25px;
 }
 
 .fi-sidebar-item .fi-icon {
@@ -89,3 +102,4 @@
     padding: 0;
     margin: 0;
 }
+

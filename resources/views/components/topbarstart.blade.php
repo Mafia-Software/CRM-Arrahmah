@@ -5,7 +5,7 @@
 
 
 
-    <span class="text-light me-3" style="padding: 0 5rem">
+    <span class="text-light me-3">
         {{ now()->translatedFormat('l, d F Y') }}
     </span>
 </div>
