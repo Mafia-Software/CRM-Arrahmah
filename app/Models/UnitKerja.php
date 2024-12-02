@@ -13,7 +13,8 @@ class UnitKerja extends Model
         'description',
     ];
 
-    public function customer(){
+    public function customer()
+    {
         return $this->hasMany(Customer::class);
     }
 }

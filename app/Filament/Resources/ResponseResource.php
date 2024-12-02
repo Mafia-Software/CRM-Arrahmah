@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\Response;
 use Filament\Forms\Form;
@@ -11,11 +10,8 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ResponseResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ResponseResource\RelationManagers;
-use Faker\Provider\ar_EG\Text;
+
 
 class ResponseResource extends Resource
 {
@@ -27,10 +23,10 @@ class ResponseResource extends Resource
     {
         return $form
             ->schema([
-                  Section::make('Input Response')
-                ->description('')
-                ->schema([TextInput::make('name')->required()->label('Name'), TextInput::make('code')->label('Code')->nullable(),])
-                ->columns(2),
+                Section::make('Input Response')
+                    ->description('')
+                    ->schema([TextInput::make('name')->required()->label('Name'), TextInput::make('code')->label('Code')->nullable(),])
+                    ->columns(2),
                 //
             ]);
     }

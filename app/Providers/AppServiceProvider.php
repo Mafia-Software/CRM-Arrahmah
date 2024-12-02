@@ -3,9 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Filament\Facades\Filament;
-use Filament\Navigation\UserMenuItem;
-use BladeUI\Icons\Factory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,12 +17,5 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-
-    }
+    public function boot(): void {}
 }
-
-
-
-
