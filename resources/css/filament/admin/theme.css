@@ -32,7 +32,7 @@
     height: 100vh;
     overflow-y: hidden;
     overflow-x: hidden;
-    padding-top: 30;
+    padding-top: 30px;
     margin: 0;
 }
 
@@ -46,10 +46,6 @@
 
 .fi-logo {
     font-size: 50px;
-}
-
-.fi-sidebar-item-label.fi-active {
-    color: rgb(0, 0, 0) !important;
 }
 
 .fi-sidebar-item-icon {
@@ -73,4 +69,13 @@
 
 .fi-topbar .fi-user-menu {
     display: none !important;
+}
+
+.fi-sidebar-item-active {
+    .fi-sidebar-item-icon {
+        color: #ffd034;
+    }
+    .fi-sidebar-item-label {
+        color: #ffd034;
+    }
 }
