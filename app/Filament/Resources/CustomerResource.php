@@ -18,7 +18,7 @@ use App\Filament\Resources\CustomerResource\Pages;
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
-
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'bi-person-fill-gear';
 
     public static function form(Form $form): Form
