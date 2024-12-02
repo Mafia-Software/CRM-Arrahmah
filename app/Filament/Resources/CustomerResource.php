@@ -45,12 +45,12 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id')->sortable()->searchable(),
+                TextColumn::make('id')->sortable()->searchable()->label('ID'),
                 TextColumn::make('nama')->sortable()->searchable(),
                 TextColumn::make('alamat')->sortable()->searchable(),
                 TextColumn::make('no_wa')->sortable()->searchable()->label('No. Whatsapp'),
-                TextColumn::make('unitKerja.name')->sortable()->searchable(),
-                TextColumn::make('response.name')->sortable()->searchable(),
+                TextColumn::make('unitKerja.name')->sortable()->searchable()->label('Unit Kerja'),
+                TextColumn::make('response.name')->sortable()->searchable()->label('Response'),
 
             ])
             ->filters([

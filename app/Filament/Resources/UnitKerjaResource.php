@@ -15,7 +15,7 @@ use App\Filament\Resources\UnitKerjaResource\Pages;
 class UnitKerjaResource extends Resource
 {
     protected static ?string $model = UnitKerja::class;
-
+    protected static ?string $navigationLabel = 'Unit Kerja';
     protected static ?string $navigationIcon = 'bi-envelope-paper';
 
     public static function form(Form $form): Form
@@ -34,9 +34,9 @@ class UnitKerjaResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id')->sortable()->searchable(),
-                TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('description')->sortable()->searchable(),
+                TextColumn::make('id')->sortable()->searchable()->label('ID'),
+                TextColumn::make('name')->sortable()->searchable()->label('Nama'),
+                TextColumn::make('description')->sortable()->searchable()->label('Deskripsi'),
             ])
             ->filters([
                 //

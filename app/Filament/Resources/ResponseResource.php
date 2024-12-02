@@ -35,9 +35,9 @@ class ResponseResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable()->searchable(),
-                TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('code')->sortable()->searchable(),
+                TextColumn::make('id')->sortable()->searchable()->label('ID'),
+                TextColumn::make('name')->sortable()->searchable()->label('Nama'),
+                TextColumn::make('code')->sortable()->searchable()->label('Kode'),
                 //
             ])
             ->filters([
