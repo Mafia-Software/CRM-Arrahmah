@@ -7,6 +7,7 @@ use Filament\Pages\Page;
 class WABlast extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $slug = 'wablast';
     protected static ?string $title = 'WA Blast';
-    protected static string $view = 'filament.pages.w-a-blast';
+    protected static string $view = 'filament.pages.wablast';
 }
