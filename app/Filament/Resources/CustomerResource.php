@@ -49,7 +49,7 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id')->sortable()->searchable(),
+                TextColumn::make('id')->sortable()->searchable()->label('No'),
                 TextColumn::make('nama')->sortable()->searchable(),
                 TextColumn::make('alamat')->sortable()->searchable(),
                 TextColumn::make('no_wa')->sortable()->searchable()->label('No. Whatsapp'),
