@@ -1,21 +1,16 @@
-<div class="fi-sidebar-footer flex flex-col items-center mt-auto p-4">
+<div class="fi-sidebar-footer mt-auto flex flex-col items-center p-4">
     <div class="profile-picture mb-2">
-        <i class="bi bi-person-circle" style="font-size: 50px; color: black;"></i>
-
+        <i class="bi-person-circle"></i>
+        <x-bi-person-circle width="50" height="50" color="#fff" />
     </div>
-    <span class="text-white font-medium">ADMIN</span>
+    <span class="font-medium text-white">ADMIN</span>
 
     <form action="/admin/logout" method="POST">
-    @csrf
-    <button type="submit" class="mt-2 bg-white text-purple-700 px-4 py-2 rounded-lg text-sm font-semibold flex items-center">
-        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path d="M12 19V6M19 12l-7 7-7-7" />
-        </svg>
-        LOGOUT
-
-    </button>
+        @csrf
+        <button type="submit"
+            class="mt-2 flex items-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-purple-700">
+            <x-bi-box-arrow-right width="20" height="20" color="#000" />&nbsp;LOGOUT
+        </button>
     </form>
 
-
 </div>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">

@@ -13,7 +13,8 @@ class Response extends Model
         'code'
     ];
 
-    public function customer(){
+    public function customer()
+    {
         return $this->hasMany(Customer::class);
     }
 }

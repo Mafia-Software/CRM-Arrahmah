@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\UnitKerja;
@@ -11,15 +10,13 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UnitKerjaResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\UnitKerjaResource\RelationManagers;
 
 class UnitKerjaResource extends Resource
 {
     protected static ?string $model = UnitKerja::class;
-
+    protected static ?string $navigationLabel = 'Unit Kerja';
+    protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'bi-envelope-paper';
 
     public static function form(Form $form): Form
@@ -38,9 +35,9 @@ class UnitKerjaResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id')->sortable()->searchable(),
-                TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('description')->sortable()->searchable(),
+                TextColumn::make('id')->sortable()->searchable()->label('ID'),
+                TextColumn::make('name')->sortable()->searchable()->label('Nama'),
+                TextColumn::make('description')->sortable()->searchable()->label('Deskripsi'),
             ])
             ->filters([
                 //
@@ -52,8 +49,8 @@ class UnitKerjaResource extends Resource
     public static function getRelations(): array
     {
         return [
-                //
-            ];
+            //
+        ];
     }
 
     public static function getPages(): array

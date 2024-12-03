@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     //
-        protected $fillable = [
-            'id',
+    protected $fillable = [
+        'id',
         'nama',
         'alamat',
         'no_wa',
@@ -17,12 +17,14 @@ class Customer extends Model
 
     ];
 
-    public function unitKerja () {
-        
+    public function unitKerja()
+    {
+
         return $this->belongsTo(UnitKerja::class);
     }
 
-    public function response() {
+    public function response()
+    {
         return $this->belongsTo(Response::class);
     }
 }

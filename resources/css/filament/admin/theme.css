@@ -1,4 +1,4 @@
-@import '/vendor/filament/filament/resources/css/theme.css';
+@import "/vendor/filament/filament/resources/css/theme.css";
 @config 'tailwind.config.js';
 
 @layer base {
@@ -11,6 +11,9 @@
     :root.dark .fi-sidebar-header {
         background-color: #591f86;
     }
+    :root.dark .fi-sidebar-item-label {
+        color: rgb(255, 255, 255);
+    }
 }
 
 .fi-breadcrumbs-list {
@@ -22,20 +25,19 @@
     min-width: 200px;
 }
 
-
 .fi-sidebar-nav {
-    background-color: #913fcf !important;
+    background-color: #4f0786 !important;
     display: flex;
     flex-direction: column;
     height: 100vh;
     overflow-y: hidden;
     overflow-x: hidden;
-    padding-top: 30;
+    padding-top: 30px;
     margin: 0;
 }
 
 .fi-sidebar-header {
-    background-color: #8030bd;
+    background-color: #410271;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,50 +48,18 @@
     font-size: 50px;
 }
 
-@layer base {
-    :root.dark .fi-sidebar-item-label {
-        color: rgb(255, 255, 255);
-    }
-}
-
-.fi-sidebar-item-label.fi-active {
-    color: rgb(0, 0, 0) !important;
-}
-
 .fi-sidebar-item-icon {
+    display: flex;
     font-size: 1rem;
     height: 60px;
     width: 80px;
-    color: #000;
-    padding-left: 25px;
-}
-
-.fi-sidebar-item .fi-icon {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-}
-
-.logo-text {
-    font-size: 6rem;
-    text-align: center;
-}
-
-.fi-sidebar-item .bi {
-    font-size: 3rem;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-}
-
-.fi-sidebar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-align: center;
+    color: #fff;
+    justify-self: center;
 }
 
 .fi-sidebar-item-label {
-    font-size: 20px;
+    font-size: 18px;
+    color: #fff;
 }
 
 .fi-sidebar-item-button {
@@ -97,12 +67,15 @@
     text-align: center;
 }
 
-.fi-sidebar-item {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
 .fi-topbar .fi-user-menu {
     display: none !important;
+}
+
+.fi-sidebar-item-active {
+    .fi-sidebar-item-icon {
+        color: #ffd034;
+    }
+    .fi-sidebar-item-label {
+        color: #ffd034;
+    }
 }
