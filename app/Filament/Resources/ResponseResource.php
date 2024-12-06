@@ -12,23 +12,22 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\ResponseResource\Pages;
 
-
 class ResponseResource extends Resource
 {
     protected static ?string $model = Response::class;
     protected static ?int $navigationSort = 5;
     protected static ?string $navigationIcon = 'bi-graph-up-arrow';
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Section::make('Input Response')
-                    ->description('')
-                    ->schema([TextInput::make('name')->required()->label('Name'), TextInput::make('code')->label('Code')->nullable(),])
-                    ->columns(2),
-                //
-            ]);
+        return $form->schema([
+            Section::make('Input Response')
+                ->description('')
+                ->schema([TextInput::make('name')->required()->label('Name'), TextInput::make('code')->label('Code')->nullable()])
+                ->columns(2),
+            //
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -43,22 +42,15 @@ class ResponseResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 
     public static function getPages(): array
