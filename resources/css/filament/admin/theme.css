@@ -20,9 +20,9 @@
     background-color: white;
 }
 .fi-sidebar {
-    width: 200px;
+    width: 150px;
     max-width: 300px;
-    min-width: 200px;
+    min-width: 150px;
 }
 
 .fi-sidebar-nav {
@@ -49,22 +49,26 @@
 }
 
 .fi-sidebar-item-icon {
+
     display: flex;
     font-size: 1rem;
-    height: 60px;
-    width: 80px;
+    height: 50px;
+    width: 60px;
     color: #fff;
     justify-self: center;
 }
 
 .fi-sidebar-item-label {
-    font-size: 18px;
+    font-size: 16px;
     color: #fff;
+
+
 }
 
 .fi-sidebar-item-button {
     display: block;
     text-align: center;
+
 }
 
 .fi-topbar .fi-user-menu {
@@ -72,10 +76,40 @@
 }
 
 .fi-sidebar-item-active {
+
     .fi-sidebar-item-icon {
         color: #ffd034;
+
     }
     .fi-sidebar-item-label {
         color: #ffd034;
     }
+}
+
+
+.fi-sidebar-group.fi-active ul li > a {
+    background-color: transparent;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.fi-sidebar-group.fi-active ul li > a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.fi-sidebar-group.fi-active ul li > a:hover .fi-sidebar-item-icon,
+.fi-sidebar-group.fi-active ul li > a:hover .fi-sidebar-item-label {
+    color: #ffd034;
+}
+
+body > div:nth-child(1) > aside > nav > ul > li > ul > li > a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+body > div:nth-child(1) > aside > nav > ul > li > ul > li > a:hover .fi-sidebar-item-icon,
+body > div:nth-child(1) > aside > nav > ul > li > ul > li > a:hover .fi-sidebar-item-label {
+    color: #ffd034;
 }
