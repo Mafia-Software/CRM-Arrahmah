@@ -113,3 +113,16 @@ body > div:nth-child(1) > aside > nav > ul > li > ul > li > a:hover .fi-sidebar-
 body > div:nth-child(1) > aside > nav > ul > li > ul > li > a:hover .fi-sidebar-item-label {
     color: #ffd034;
 }
+
+body > div.fi-layout.flex.min-h-screen.w-full.flex-row-reverse.overflow-x-clip > aside > nav > ul > li.fi-sidebar-group.flex.flex-col.gap-y-1.fi-active > ul > li:nth-child(3) > a {
+    position: relative;
+}
+
+body > div.fi-layout.flex.min-h-screen.w-full.flex-row-reverse.overflow-x-clip > aside > nav > ul > li.fi-sidebar-group.flex.flex-col.gap-y-1.fi-active > ul > li:nth-child(3) > a > span {
+    position: absolute;
+    left: -7px;
+    top: 65px;
+}
+body > div:nth-child(1) > aside > nav > ul > li:nth-child(1) > ul > li:nth-child(4) {
+    margin-top: 25px;
+}
