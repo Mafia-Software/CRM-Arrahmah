@@ -36,7 +36,7 @@ class CustomerResource extends Resource
                         Select::make('response')
                             ->relationship('Response', 'name'),
                     ])
-                    ->columns(2),
+                    ->columns(1),
             ]);
     }
 
