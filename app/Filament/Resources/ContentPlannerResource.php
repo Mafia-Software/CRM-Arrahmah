@@ -20,8 +20,9 @@ class ContentPlannerResource extends Resource
 {
     protected static ?string $model = ContentPlanner::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'bi-graph-up-arrow';
+    protected static ?string $navigationLabel = "Content Planner";
+    protected static ?int $navigationSort = 2;
     public static function form(Form $form): Form
     {
         return $form
