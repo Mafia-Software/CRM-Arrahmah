@@ -2,56 +2,49 @@
 
 namespace App\Services;
 
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
+
+// use GuzzleHttp\Client;
 
 class WhatsAppService
 {
-    protected $client;
-    protected $url;
-    protected $apiKey;
+    // protected $instance_id;
+    // protected $accessToken;
 
-    public function __construct()
+    // public function __construct()
+    // {
+
+    //     $this->instance_id = env('WABLAST_INSTANCE_ID');
+    //     $this->accessToken = env('WABLAST_API_KEY');
+    // }
+
+    public function sendMessage($number, $type, $message, $instance_id, $token)
     {
-        $this->client = new Client();
-        $this->url = env('WABLAST_URL');
-        $this->apiKey = env('WABLAST_API_KEY');
-    }
+        $url = 'https://new.sentwa.com/api/send.php';
 
-    public function sendMessage($number, $type, $message, $instance, $token)
-    {
-        try {
-            $response = $this->client->post($this->url, [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->apiKey}",
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => [
-                    'number' => $number,
-                    'type' => $type,
-                    'message' => $message,
-                    'instance_id' => $instance,
-                    'access_token' => $token,
-                ],
-                'verify' => false, // Nonaktifkan verifikasi SSL (untuk testing)
-            ]);
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'number' => $number,
+            'type' => $type,
+            'message' => $message,
+            'instance_id' => $instance_id,
+            'access_token' => $token
+        ]);
+        
 
-            // Periksa status code dan response body
-            $statusCode = $response->getStatusCode();
-            $body = $response->getBody()->getContents(); // Menangkap body respons
-
-            
-
-            // Menyimpan atau menampilkan status code dan body
+          // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            // Jika gagal, mengembalikan status dan pesan error
             return [
-                'status_code' => $statusCode,
-                'response_body' => json_decode($body, true), // Parse JSON response
-            ];
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
+                'status' => $response->status(),
+                'error' => $response->body()
             ];
         }
         
     }
+
 }
