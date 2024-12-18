@@ -27,10 +27,10 @@ class WhatsAppController extends Controller
         $number = $request->input('number');
         $type = $request->input('type');
         $message = $request->input('message');
-        $sender = $request->input('instance_id');
+        $instance_id = $request->input('instance_id');
         $token = $request->input('access_token');
 
-        $response = $this->whatsAppService->sendMessage($number, $type, $message, $sender, $token);
+        $response = $this->whatsAppService->sendMessage($number, $type, $message, $instance_id, $token);
 
         return response()->json($response);
     }
