@@ -20,11 +20,11 @@ class Customer extends Model
     public function unitKerja()
     {
 
-        return $this->belongsTo(UnitKerja::class);
+        return $this->belongsTo(UnitKerja::class, 'id');
     }
 
     public function response()
     {
-        return $this->belongsTo(Response::class);
+        return $this->belongsTo(Response::class, 'id');
     }
 }
