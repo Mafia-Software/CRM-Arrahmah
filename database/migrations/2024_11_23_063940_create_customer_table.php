@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('alamat');
             $table->string('no_wa');
-            $table->string('unit_kerja');
+            $table->string('unit_kerja_id');
             // $table->string('unit_kerja_id')->nullable();
             // $table->string('response_id')->nullable();
             $table->string('response');

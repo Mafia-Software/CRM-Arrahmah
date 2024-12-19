@@ -30,7 +30,7 @@ class CustomerResource extends Resource
                         TextInput::make('nama')->required(),
                         TextInput::make('alamat')->required(),
                         TextInput::make('no_wa')->required()->label('No. Whatsapp'),
-                        Select::make('unit_kerja')
+                        Select::make('unit_kerja_id')
                             ->label('Unit Kerja')
                             ->relationship('UnitKerja', 'name'),
                         Select::make('response')
