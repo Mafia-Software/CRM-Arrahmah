@@ -2,23 +2,21 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 // use GuzzleHttp\Client;
 
 class WhatsAppService
 {
-    // protected $instance_id;
-    // protected $accessToken;
+    protected $accessToken;
 
-    // public function __construct()
-    // {
+    public function __construct()
+    {
+        $this->accessToken = Config::get('custom.wa_token');
+    }
 
-    //     $this->instance_id = env('WABLAST_INSTANCE_ID');
-    //     $this->accessToken = env('WABLAST_API_KEY');
-    // }
-
-    public function sendMessage($number, $type, $message, $instance_id, $token)
+    public function sendMessage($number, $type, $message, $instance_id)
     {
         $url = 'https://new.sentwa.com/api/send.php';
 
@@ -29,11 +27,11 @@ class WhatsAppService
             'type' => $type,
             'message' => $message,
             'instance_id' => $instance_id,
-            'access_token' => $token
+            'access_token' => $this->accessToken
         ]);
-        
 
-          // Memeriksa status dan respons
+
+        // Memeriksa status dan respons
         if ($response->successful()) {
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
@@ -44,7 +42,5 @@ class WhatsAppService
                 'error' => $response->body()
             ];
         }
-        
     }
-
 }
