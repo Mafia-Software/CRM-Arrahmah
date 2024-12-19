@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 // use GuzzleHttp\Client;
 
-class WhatsAppService
+class WhatsappService
 {
     protected $accessToken;
 
