@@ -16,7 +16,7 @@ class WhatsappService
         $this->accessToken = Config::get('custom.wa_token');
     }
 
-    public function sendMessage($number, $type, $message, $instance_id)
+    public function sendMessage($number, $message, $instance_id)
     {
         $url = 'https://new.sentwa.com/api/send.php';
 
@@ -24,7 +24,7 @@ class WhatsappService
             "verify" => false,
         ])->get($url, [
             'number' => $number,
-            'type' => $type,
+            'type' => 'text',
             'message' => $message,
             'instance_id' => $instance_id,
             'access_token' => $this->accessToken
