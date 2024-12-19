@@ -13,7 +13,7 @@ class Customer extends Model
         'alamat',
         'no_wa',
         'unit_kerja_id',
-        'response',
+        'response_id',
 
     ];
 
