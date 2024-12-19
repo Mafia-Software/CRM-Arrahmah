@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Jobs\SendWhatsAppMessageJob;
+use App\Jobs\SendMessageJob;
 use Illuminate\Http\Request;
 use App\Services\WhatsappService;
+use App\Http\Controllers\Controller;
+use App\Jobs\SendWhatsAppMessageJob;
 
 class WhatsappController extends Controller
 {
@@ -23,17 +24,14 @@ class WhatsappController extends Controller
             'type' => 'required',
             'message' => 'required',
             'instance_id' => 'required',
-            'access_token' => 'required',
         ]);
 
         $number = $request->input('number');
         $type = $request->input('type');
         $message = $request->input('message');
         $instance_id = $request->input('instance_id');
-        $token = $request->input('access_token');
 
         // $response = $this->whatsAppService->sendMessage($number, $type, $message, $instance_id, $token);
-
         SendWhatsAppMessageJob::dispatch(
             $validated['number'],
             $validated['type'],
