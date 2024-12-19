@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMessageJob;
 use Illuminate\Http\Request;
 use App\Services\WhatsappService;
 
@@ -29,10 +30,9 @@ class WhatsAppController extends Controller
         $type = $request->input('type');
         $message = $request->input('message');
         $instance_id = $request->input('instance_id');
-        $token = $request->input('access_token');
 
-        $response = $this->whatsAppService->sendMessage($number, $type, $message, $instance_id, $token);
+        // $response = $this->whatsAppService->sendMessage($number, $type, $message, $instance_id, $token);
 
-        return response()->json($response);
+        SendMessageJob::dispatch($number, $type, $message, $instance_id);
     }
 }
