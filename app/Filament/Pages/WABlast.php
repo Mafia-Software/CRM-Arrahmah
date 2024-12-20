@@ -2,9 +2,14 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\ContentPlanner;
 use App\Models\Customer;
 use App\Models\UnitKerja;
+use Filament\Actions\Concerns\InteractsWithRecord;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Pages\Page;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -19,6 +24,7 @@ class WABlast extends Page implements HasTable, HasForms
 {
     use InteractsWithTable;
     use InteractsWithForms;
+    use InteractsWithRecord;
     protected static ?string $navigationIcon = 'bi-envelope-arrow-up-fill';
     protected static ?int $navigationSort = 3;
     protected static ?string $slug = 'wablast';
@@ -31,10 +37,31 @@ class WABlast extends Page implements HasTable, HasForms
     {
         return $form
             ->schema([
-                Select::make('selectedUnitKerja')
-                    ->label('Unit Kerja')
-                    ->options(UnitKerja::all()->pluck('name', 'id'))
-                    ->reactive()
+                Section::make('')->columns([
+                    'sm' => 3,
+                    'xl' => 6,
+                    '2xl' => 8,
+                ])->schema([
+                    Select::make('selectedUnitKerja')
+                        ->label('Unit Kerja')
+                        ->options(UnitKerja::all()->pluck('name', 'id'))
+                        ->columnSpan([
+                            'sm' => 2,
+                            'xl' => 3,
+                            '2xl' => 4,
+                        ])
+                        ->reactive(),
+                    Select::make('selectedContentPlanner')
+                        ->label('Content Planner')
+                        ->options(ContentPlanner::all()->pluck('pesan', 'id'))
+                        ->columnSpan([
+                            'sm' => 2,
+                            'xl' => 3,
+                            '2xl' => 4,
+                        ])
+                        ->reactive(),
+                ])
+
             ]);
     }
 
@@ -49,6 +76,17 @@ class WABlast extends Page implements HasTable, HasForms
             ])
             ->query(function () {
                 return Customer::where('unit_kerja_id', $this->selectedUnitKerja);
-            });
+            })
+            ->actions([
+                DeleteAction::make()
+                    ->action(function (DeleteAction $action) use ($table) {
+                        $recordId = $action->getRecord()->id;
+                    }),
+            ]);
+    }
+
+    public function sendMessage()
+    {
+        dd($this->table->getRecords()->toArray());
     }
 }
