@@ -21,15 +21,15 @@ class WhatsappController extends Controller
         $validated = $request->validate([
             'number' => 'required',
             'message' => 'required',
-            // 'instance_id' => 'required',
+            'instance_id' => 'required',
         ]);
-        // $response = $this->whatsAppService->sendMessage($number, $type, $message, $instance_id, $token);
-        SendWhatsAppMessageJob::dispatch(
-            $validated['number'],
-            $validated['message'],
-            // $validated['instance_id']
-        );
+        $response = $this->whatsAppService->sendMessage($validated['number'], $validated['message'], $validated['instance_id']);
+        // SendWhatsAppMessageJob::dispatch(
+        //     $validated['number'],
+        //     $validated['message'],
+        //     $validated['instance_id']
+        // );
 
-        return response()->json();
+        return $response;
     }
 }

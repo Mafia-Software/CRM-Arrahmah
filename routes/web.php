@@ -9,4 +9,4 @@ Route::get('/', function () {
     return redirect('/admin');
 });
 
-Route::get('/test-whatsapp', [WhatsappController::class, 'send']);
+Route::post('/sendMessage', [WhatsappController::class, 'send']);
