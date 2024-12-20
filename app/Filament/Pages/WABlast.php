@@ -2,31 +2,53 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\ContentPlanner;
 use App\Models\Customer;
 use App\Models\UnitKerja;
 use Filament\Pages\Page;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 
-class WABlast extends Page
+
+class WABlast extends Page implements HasTable, HasForms
 {
+    use InteractsWithTable;
+    use InteractsWithForms;
     protected static ?string $navigationIcon = 'bi-envelope-arrow-up-fill';
     protected static ?int $navigationSort = 3;
     protected static ?string $slug = 'wablast';
     protected static ?string $title = 'WA Blast';
     protected static string $view = 'filament.pages.wablast';
 
-    public $UnitKerja;
+    public $selectedUnitKerja;
 
-    public $ContentPlanner;
-    public $Customer;
-    public function mount()
+    public function form(Form $form): Form
     {
-        $this->Customer = Customer::all();
-        $this->UnitKerja = UnitKerja::all();
-
-        $this->ContentPlanner = ContentPlanner::all();
+        return $form
+            ->schema([
+                Select::make('selectedUnitKerja')
+                    ->label('Unit Kerja')
+                    ->options(UnitKerja::all()->pluck('name', 'id'))
+                    ->reactive()
+            ]);
     }
 
-
-
+    public function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('id')->label('ID'),
+                TextColumn::make('nama'),
+                TextColumn::make('alamat'),
+                TextColumn::make('no_wa')->label('No. Whatsapp'),
+            ])
+            ->query(function () {
+                return Customer::where('unit_kerja_id', $this->selectedUnitKerja);
+            });
+    }
 }
