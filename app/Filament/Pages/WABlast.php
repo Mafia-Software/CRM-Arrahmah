@@ -89,4 +89,16 @@ class WABlast extends Page implements HasTable, HasForms
     {
         dd($this->table->getRecords()->toArray());
     }
+    public $UnitKerja;
+    public $ContentPlanner;
+
+    public function mount()
+    {
+
+        $this->UnitKerja = UnitKerja::all();
+
+        $this->ContentPlanner = ContentPlanner::all();
+    }
 }
+
+
