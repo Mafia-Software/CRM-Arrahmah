@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('webhooks', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('alamat');
-            $table->string('no_wa');
-            $table->string('unit_kerja_id')->nullable();
-            $table->string('response_id')->nullable();
-            $table->string('user_id')->nullable();
+            $table->json("webhook");
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('webhooks');
     }
 };
