@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -10,11 +9,9 @@ use App\Models\ContentPlanner;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 use App\Filament\Resources\ContentPlannerResource\Pages;
-use App\Filament\Resources\ContentPlannerResource\RelationManagers;
+use Filament\Forms\Components\RichEditor;
 
 class ContentPlannerResource extends Resource
 {
@@ -30,7 +27,11 @@ class ContentPlannerResource extends Resource
                 Section::make('Content Planner')
                     ->description('')
                     ->schema([
-                        TextInput::make('pesan')->required(),
+                        RichEditor::make('pesan')->required()->toolbarButtons([
+                            'bold',
+                            'italic',
+                            'underline',
+                        ]),
                     ])
                     ->columns(1),
 
@@ -42,7 +43,7 @@ class ContentPlannerResource extends Resource
         return $table
             ->columns([
                 //
-                 TextColumn::make('id')->sortable()->searchable()->label('ID'),
+                TextColumn::make('id')->sortable()->searchable()->label('ID'),
                 TextColumn::make('pesan')->sortable()->searchable(),
             ])
             ->filters([
