@@ -4,4 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Webhook extends Model {}
+class Webhook extends Model {
+
+    protected $fillable = [
+    'id',
+    'webhook',
+    ];
+}
