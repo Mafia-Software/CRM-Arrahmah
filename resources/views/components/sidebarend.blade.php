@@ -3,7 +3,7 @@
         <i class="bi-person-circle"></i>
         <x-bi-person-circle width="50" height="50" color="#fff" />
     </div>
-    <span class="font-medium text-white">ADMIN</span>
+    <span class="font-medium text-white">{{ Auth::user()->name ?? 'ADMIN' }}</span>
 
     <form action="/admin/logout" method="POST">
         @csrf
