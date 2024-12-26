@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateWhatsAppServer extends CreateRecord
 {
     protected static string $resource = WhatsAppServerResource::class;
+
+     protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('index');
+    }
 }
