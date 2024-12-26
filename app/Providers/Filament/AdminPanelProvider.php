@@ -52,8 +52,13 @@ class AdminPanelProvider extends PanelProvider
             ->RenderHook(PanelsRenderHook::SIDEBAR_NAV_END, fn() => view('components.sidebarend'))
             ->darkMode(false)
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->plugins(
-                [FilamentFullCalendarPlugin::make()]);
+            ->plugin(
+                FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone('Asia/Jakarta')
+                    ->locale('id')
+            );
 
     }
 }

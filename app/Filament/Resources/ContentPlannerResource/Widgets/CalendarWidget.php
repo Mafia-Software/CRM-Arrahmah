@@ -5,14 +5,20 @@ namespace App\Filament\Resources\ContentPlannerResource\Widgets;
 use Filament\Widgets\Widget;
 use App\Models\ContentPlanner;
 use Forms\Components\TextInput;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Grid;
 use Illuminate\Database\Eloquent\Model;
+
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\ContentPlannerResource;
+use Saade\FilamentFullCalendar\Actions\CreateAction;
+use Saade\FilamentFullCalendar\Actions\DeleteAction;
+use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
-class CalendarWidget extends Widget
+class CalendarWidget extends FullCalendarWidget
 {
     // protected static string $view = 'filament.resources.content-planner-resource.widgets.calendar-widget';
+      protected static string $view = 'filament.resources.content-planner-resource.widgets.calendar-widget';
 
     public Model | string | null $model = ContentPlanner::class;
 
@@ -51,21 +57,34 @@ class CalendarWidget extends Widget
         return false;
     }
 
-public function getFormSchema(): array
-{
-    return [
-        Forms\Components\TextInput::make('name')
-            ->required(), // Misalnya, jika field name harus diisi
+protected function headerActions(): array
+    {
+        return [
+            CreateAction::make()
+            ->mountUsing(function ($form, $arguments) {
+                $form->fill([
+                    'starts_at' => $arguments['start'] ?? null,
+                    'ends_at' => $arguments['end'] ?? null,
+                ]);
+            }),
+        ];
+    }
 
-        // Menggunakan Grid dengan mendefinisikan kolom
-        Forms\Components\Grid::make(2) // Menyusun dua kolom
-            ->schema([
-                Forms\Components\DateTimePicker::make('starts_at')
-                    ->required(), // Menambahkan validasi jika perlu
-                Forms\Components\DateTimePicker::make('ends_at')
-                    ->required(), // Menambahkan validasi jika perlu
-            ]),
-    ];
+    protected function modalActions(): array
+    {
+        return [
+            EditAction::make(),
+            DeleteAction::make(),
+        ];
+    }
+
+    public function eventDidMount(): string
+{
+    return <<<JS
+        function({ event, el }) {
+            el.title = event.title;
+        }
+    JS;
 }
 
 }
