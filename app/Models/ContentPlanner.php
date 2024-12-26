@@ -10,5 +10,6 @@ class ContentPlanner extends Model
     protected $fillable = [
         "id",
         "pesan",
+        'tanggal',
     ];
 }
