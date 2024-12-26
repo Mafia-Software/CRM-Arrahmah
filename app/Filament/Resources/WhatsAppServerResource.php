@@ -3,9 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WhatsAppServerResource\Pages;
+use App\Http\Controllers\API\WhatsappController;
 use App\Models\WhatsappServer;
+use App\Services\WhatsappService;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -15,7 +18,8 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class WhatsAppServerResource extends Resource
 {
@@ -66,14 +70,30 @@ class WhatsAppServerResource extends Resource
                             1 => 'Putuskan',
                             default => null,
                         })
-                        ->url(fn($record) => match ($record->is_active) {
-                            default => null,
-                        })
                         ->icon(fn($record) => match ($record->is_active) {
                             0 => 'heroicon-o-qr-code',
                             1 => 'heroicon-o-x-circle',
                             default => null,
-                        }),
+                        })->modalContent(function ($record): View {
+                            $wa = new WhatsappController(new WhatsappService);
+                            $qr = $wa->getQR($record->instance_id);
+                            if ($qr['status'] == 'success') {
+                                $qrCode = substr($qr['base64'], strpos($qr['base64'], ',') + 1);
+                                Storage::disk('local')->put("test.png", base64_decode($qrCode));
+                                session()->put('qr', $qrCode);
+                            } else {
+                                Notification::make()
+                                    ->title('Gagal Mendapatkan QR')
+                                    ->danger()
+                                    ->body($qr['message'])
+                                    ->send();
+                            }
+                            $qrCode = session()->get('qr');
+                            session()->forget('qr');
+                            return view('filament.pages.components.qr-modal', ['qr' => $qrCode]);
+                        })
+                        ->modalSubmitAction(false)
+                        ->modalCancelAction(false),
                     EditAction::make(),
                     DeleteAction::make(),
                 ])

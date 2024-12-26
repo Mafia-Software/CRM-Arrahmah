@@ -32,4 +32,14 @@ class WhatsappController extends Controller
 
         return $response;
     }
+
+    public function createInstance()
+    {
+        return $this->whatsAppService->createInstance();
+    }
+
+    public function getQR($instance_id)
+    {
+        return $this->whatsAppService->getQR($instance_id);
+    }
 }

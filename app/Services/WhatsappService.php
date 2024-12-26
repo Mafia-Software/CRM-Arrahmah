@@ -44,12 +44,34 @@ class WhatsappService
     }
     public function getQR($instance_id)
     {
-        $url = 'https://new.sentwa.com/api/get_qr.php';
+        $url = 'https://new.sentwa.com/api/getqrcode.php';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
             'instance_id' => $instance_id,
+            'access_token' => $this->accessToken
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'error' => $response->body()
+            ];
+        }
+    }
+    public function createInstance()
+    {
+        $url = 'https://new.sentwa.com/api/createinstance.php';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
             'access_token' => $this->accessToken
         ]);
 
