@@ -6,6 +6,7 @@ use App\Filament\Resources\WhatsAppServerResource;
 use App\Http\Controllers\API\WhatsappController;
 use App\Services\WhatsappService;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,6 +25,7 @@ class CreateWhatsAppServer extends CreateRecord
         $wa = new WhatsappController(new WhatsappService);
         $response = $wa->createInstance();
         if ($response['instance_id'] == null) {
+            Notification::make()->danger()->title('Error')->body($response['error'])->send();
             $this->cancel();
         }
         $data['instance_id'] = $response['instance_id'];
