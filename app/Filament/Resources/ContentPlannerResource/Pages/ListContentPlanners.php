@@ -12,22 +12,11 @@ class ListContentPlanners extends ListRecords
 {
     protected static string $resource = ContentPlannerResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            // Actions\CreateAction::make()->label('Tambah Content Planner'),
-        ];
-    }
     protected function getHeaderWidgets(): array
     {
-        
+
         return [
             CalendarWidget::class
         ];
     }
-
-
-         
-
-   
 }
