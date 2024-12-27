@@ -15,9 +15,10 @@ class CreateWhatsAppServer extends CreateRecord
 {
     protected static string $resource = WhatsAppServerResource::class;
 
-    protected function getRedirectUrl(): string
+     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl('index');
+        return static::getResource()::getUrl('index');
+
     }
 
     protected function handleRecordCreation(array $data): Model

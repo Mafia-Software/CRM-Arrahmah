@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContentPlanner extends Model
+class History extends Model
 {
     //
     protected $fillable = [
-        "id",
-        "pesan",
-        'tanggal',
-    ];
+        'id',
+        'user_id',
+        'whatsapp_server_id',
+    ]
 }
