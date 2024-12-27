@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('no_wa');
+            $table->integer('delay');
             $table->boolean('is_active')->default(false);
-            $table->string('instance_id')->nullable();
             $table->timestamps();
         });
     }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->string("user_id");
-            $table->string("whatsapp_server_id");
+            $table->string("user_id")->constrained('users');
+            $table->string("whatsapp_server_id")->constrained('whatsapp_servers');
             $table->timestamps();
         });
     }

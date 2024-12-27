@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('nama');
             $table->string('alamat');
             $table->string('no_wa');
-            $table->string('unit_kerja_id')->nullable();
-            $table->string('response_id')->nullable();
-            $table->string('user_id')->nullable();
+            $table->string('unit_kerja_id')->nullable()->constrained('unit_kerjas');
+            $table->string('response_id')->nullable()->constrained('responses');
+            $table->string('user_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }
