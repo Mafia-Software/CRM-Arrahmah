@@ -9,21 +9,27 @@ use Illuminate\Support\Facades\Http;
 
 class WhatsappService
 {
-    protected $accessToken;
+    protected $wa_api;
+    protected $telegram_token;
+    protected $wa_endpoint;
+    protected $webhook_url;
 
     public function __construct()
     {
-        $this->accessToken = Config::get('custom.wa_token');
+        $this->wa_api = Config::get('custom.wa_api');
+        $this->telegram_token = Config::get('custom.telegram_token');
+        $this->wa_endpoint = Config::get('custom.wa_endpoint');
+        $this->webhook_url = Config::get('custom.webhook_url');
     }
 
     public function sendMessage($number, $message)
     {
-        $url = 'http://waapi.domcloud.dev/api/sendMessage';
+        $url = $this->wa_endpoint.'sendMessage';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'apiKey' => $this->accessToken,
+            'apiKey' => $this->wa_api,
             'phone' => $number,
             'message' => $message,
         ]);
@@ -48,7 +54,7 @@ class WhatsappService
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'apiKey' => $this->accessToken,
+            'apiKey' => $this->wa_api,
             'phone' => $number,
             'message' => $message,
             'delay' => $delay,
@@ -73,7 +79,7 @@ class WhatsappService
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'apiKey' => $this->accessToken
+            'apiKey' => $this->wa_api
         ]);
 
         // Memeriksa status dan respons
@@ -96,7 +102,7 @@ class WhatsappService
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'apiKey' => $this->accessToken,
+            'apiKey' => $this->wa_api,
             'phone' => $number,
             'url_file' => $url_file,
             'as_document' => $as_document,
@@ -115,18 +121,19 @@ class WhatsappService
         }
     }
 
-    public function addDevice($number, $name_device, $pair, $tele_id)
+    public function addDevice($number, $name_device)
     {
         $url = 'http://waapi.domcloud.dev/api/addDevice';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'secret' => $this->accessToken,
+            'secret' => $this->wa_api,
             'name' => $name_device,
-            'pair_method' => $pair,
+            'pair_method' => 1,
             'number_hp' => $number,
-            'tele_id' => $tele_id,
+            'tele_id' => $this->telegram_token,
+            'webhook_url' => $this->webhook_url
         ]);
 
         // Memeriksa status dan respons
@@ -142,18 +149,19 @@ class WhatsappService
         }
     }
 
-    public function editDevice($number, $name_device, $pair, $tele_id)
+    public function editDevice($number, $name_device)
     {
         $url = 'http://waapi.domcloud.dev/api/editDevice';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'secret' => $this->accessToken,
+            'secret' => $this->wa_api,
             'name' => $name_device,
-            'pair_method' => $pair,
+            'pair_method' => 1,
             'number_hp' => $number,
-            'tele_id' => $tele_id,
+            'tele_id' => $this->telegram_token,
+            'webhook_url' => $this->webhook_url
         ]);
 
         // Memeriksa status dan respons
@@ -176,7 +184,7 @@ class WhatsappService
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'secret' => $this->accessToken,
+            'secret' => $this->wa_api,
             'id' => $id_device,
 
         ]);
@@ -202,7 +210,7 @@ class WhatsappService
     //     $response = Http::withOptions([
     //         "verify" => false,
     //     ])->get($url, [
-    //         'access_token' => $this->accessToken
+    //         'access_token' => $this->wa_api
     //     ]);
 
     //     // Memeriksa status dan respons
