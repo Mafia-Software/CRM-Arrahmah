@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class CreateWhatsAppServer extends CreateRecord
 {
     protected static string $resource = WhatsAppServerResource::class;
+    protected static bool $canCreateAnother = false;
 
     protected function getRedirectUrl(): string
     {
