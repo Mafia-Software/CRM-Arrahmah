@@ -26,9 +26,10 @@ class WABlast extends Page implements HasTable, HasForms
     use InteractsWithForms;
     use InteractsWithRecord;
     protected static ?string $navigationIcon = 'bi-envelope-arrow-up-fill';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
     protected static ?string $slug = 'wablast';
     protected static ?string $title = 'WA Blast';
+    protected static ?string $navigationGroup = 'Pesan';
     protected static string $view = 'filament.pages.wablast';
 
     public $selectedUnitKerja;
@@ -91,14 +92,4 @@ class WABlast extends Page implements HasTable, HasForms
     }
     public $UnitKerja;
     public $ContentPlanner;
-
-    public function mount()
-    {
-
-        $this->UnitKerja = UnitKerja::all();
-
-        $this->ContentPlanner = ContentPlanner::all();
-    }
 }
-
-
