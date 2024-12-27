@@ -17,7 +17,7 @@ class PesanMasukResource extends Resource
 {
     protected static ?string $model = PesanMasuk::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-alt';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Pesan Masuk';
     protected static ?string $navigationGroup = 'Manajemen Pesan';
 
@@ -26,9 +26,9 @@ class PesanMasukResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('wa_server_id')
-                    ->label('WA Server ID')
+                    ->label('WA Server ID'),
 
-                    ->required(),
+
                 Forms\Components\TextInput::make('no_wa')
                     ->label('Nomor WhatsApp')
                     ->required()
@@ -45,7 +45,7 @@ class PesanMasukResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
-                Tables\Columns\TextColumn::make('ws_server_id')->label('WA Server ID'),
+                Tables\Columns\TextColumn::make('wa_server_id')->label('WA Server ID'),
                 Tables\Columns\TextColumn::make('no_wa')->label('Nomor WhatsApp'),
                 Tables\Columns\TextColumn::make('pesan')->label('Pesan'),
                 Tables\Columns\TextColumn::make('created_at')->label('Dibuat')->dateTime(),
