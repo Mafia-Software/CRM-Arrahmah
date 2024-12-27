@@ -50,6 +50,8 @@ class WhatsAppServerResource extends Resource
                 TextColumn::make('instance_id')
                     ->searchable()->label('Instance ID'),
                 IconColumn::make('is_active')->boolean()->label('Status'),
+                TextColumn::make('delay')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
