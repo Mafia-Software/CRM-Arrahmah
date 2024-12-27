@@ -14,7 +14,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\CustomerResource\Pages;
 
-
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
@@ -35,6 +34,7 @@ class CustomerResource extends Resource
                             ->relationship('UnitKerja', 'name'),
                         Select::make('response')
                             ->relationship('Response', 'name'),
+                        Select::make('user_id')->label('User')->relationship('user', 'name'),
                     ])
                     ->columns(1),
             ]);
@@ -51,7 +51,7 @@ class CustomerResource extends Resource
                 TextColumn::make('no_wa')->sortable()->searchable()->label('No. Whatsapp'),
                 TextColumn::make('unitKerja.name')->sortable()->searchable()->label('Unit Kerja'),
                 TextColumn::make('response.name')->sortable()->searchable()->label('Response'),
-
+                TextColumn::make('user.name')->sortable()->searchable()->label('User'),
             ])
             ->filters([
                 //
@@ -71,14 +71,12 @@ class CustomerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->emptyStateHeading('Belum Ada Data Customer');
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
