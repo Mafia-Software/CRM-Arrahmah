@@ -16,18 +16,16 @@ class WhatsappService
         $this->accessToken = Config::get('custom.wa_token');
     }
 
-    public function sendMessage($number, $message, $instance_id)
+    public function sendMessage($phone, $message)
     {
-        $url = 'https://new.sentwa.com/api/send.php';
+        $url = 'http://localhost:3000/api/sendMessage';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'number' => $number,
-            'type' => 'text',
+            'apiKey' => $this->accessToken,
+            'number' => $phone,
             'message' => $message,
-            'instance_id' => $instance_id,
-            'access_token' => $this->accessToken
         ]);
 
         // Memeriksa status dan respons
@@ -42,15 +40,15 @@ class WhatsappService
             ];
         }
     }
-    public function getQR($instance_id)
+    public function getQR()
     {
-        $url = 'https://new.sentwa.com/api/getqrcode.php';
+        $url = 'http://localhost:3000/api/getQR';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'instance_id' => $instance_id,
-            'access_token' => $this->accessToken
+            // 'instance_id' => $instance_id,
+            'apiKey' => $this->accessToken
         ]);
 
         // Memeriksa status dan respons
@@ -65,26 +63,26 @@ class WhatsappService
             ];
         }
     }
-    public function createInstance()
-    {
-        $url = 'https://new.sentwa.com/api/createinstance.php';
+    // public function createInstance()
+    // {
+    //     $url = 'https://new.sentwa.com/api/createinstance.php';
 
-        $response = Http::withOptions([
-            "verify" => false,
-        ])->get($url, [
-            'access_token' => $this->accessToken
-        ]);
+    //     $response = Http::withOptions([
+    //         "verify" => false,
+    //     ])->get($url, [
+    //         'access_token' => $this->accessToken
+    //     ]);
 
-        // Memeriksa status dan respons
-        if ($response->successful()) {
-            // Jika berhasil, mengembalikan respons JSON
-            return $response->json();
-        } else {
-            // Jika gagal, mengembalikan status dan pesan error
-            return [
-                'status' => $response->status(),
-                'error' => $response->body()
-            ];
-        }
-    }
+    //     // Memeriksa status dan respons
+    //     if ($response->successful()) {
+    //         // Jika berhasil, mengembalikan respons JSON
+    //         return $response->json();
+    //     } else {
+    //         // Jika gagal, mengembalikan status dan pesan error
+    //         return [
+    //             'status' => $response->status(),
+    //             'error' => $response->body()
+    //         ];
+    //     }
+    // }
 }
