@@ -1,6 +1,6 @@
 <x-filament-panels::page>
 
-        <div class="min-h-screen bg-gray-100 p-6">
+    {{-- <div class="min-h-screen bg-gray-100 p-6">
             <div class="mx-auto max-w-4xl rounded-lg bg-white p-8 shadow-md">
                 <h1 class="mb-6 text-2xl font-bold text-gray-800">WhatsApp Blast</h1>
 
@@ -47,7 +47,7 @@
                         <label for="schedule" class="block text-sm font-medium text-gray-700">Schedule</label>
                         <input type="datetime-local" id="schedule" name="schedule"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                    </div> --}}
+                    </div>
 
                     <!-- Submit Button -->
                     <div class="col-span-2">
@@ -73,8 +73,7 @@
 
 
     </script>
-
-
-
-
+ --}}
+    {{ $this->form }}
+    {{ $this->table }}
 </x-filament-panels::page>
