@@ -11,5 +11,5 @@ class History extends Model
         'id',
         'user_id',
         'whatsapp_server_id',
-    ]
+    ];
 }

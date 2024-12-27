@@ -16,18 +16,16 @@ class WhatsappService
         $this->accessToken = Config::get('custom.wa_token');
     }
 
-    public function sendMessage($number, $message, $instance_id)
+    public function sendMessage($number, $message)
     {
-        $url = 'https://new.sentwa.com/api/send.php';
+        $url = 'http://waapi.domcloud.dev/api/sendMessage';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'number' => $number,
-            'type' => 'text',
+            'apiKey' => $this->accessToken,
+            'phone' => $number,
             'message' => $message,
-            'instance_id' => $instance_id,
-            'access_token' => $this->accessToken
         ]);
 
         // Memeriksa status dan respons
@@ -42,15 +40,18 @@ class WhatsappService
             ];
         }
     }
-    public function getQR($instance_id)
+
+    public function sendBulkMessage($number, $message, $delay)
     {
-        $url = 'https://new.sentwa.com/api/getqrcode.php';
+        $url = 'http://waapi.domcloud.dev/api/sendBulkMessage';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'instance_id' => $instance_id,
-            'access_token' => $this->accessToken
+            'apiKey' => $this->accessToken,
+            'phone' => $number,
+            'message' => $message,
+            'delay' => $delay,
         ]);
 
         // Memeriksa status dan respons
@@ -65,14 +66,14 @@ class WhatsappService
             ];
         }
     }
-    public function createInstance()
+    public function getQR()
     {
-        $url = 'https://new.sentwa.com/api/createinstance.php';
+        $url = 'http://waapi.domcloud.dev/api/getQR';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'access_token' => $this->accessToken
+            'apiKey' => $this->accessToken
         ]);
 
         // Memeriksa status dan respons
@@ -87,4 +88,54 @@ class WhatsappService
             ];
         }
     }
+
+    public function sendMediaFromUrl($number, $url_file, $as_document)
+    {
+        $url = 'http://waapi.domcloud.dev/api/sendMediaFromUrl';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'apiKey' => $this->accessToken,
+            'phone' => $number,
+            'url_file' => $url_file,
+            'as_document' => $as_document,
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'error' => $response->body()
+            ];
+        }
+    }
+
+
+    // public function createInstance()
+    // {
+    //     $url = 'https://new.sentwa.com/api/createinstance.php';
+
+    //     $response = Http::withOptions([
+    //         "verify" => false,
+    //     ])->get($url, [
+    //         'access_token' => $this->accessToken
+    //     ]);
+
+    //     // Memeriksa status dan respons
+    //     if ($response->successful()) {
+    //         // Jika berhasil, mengembalikan respons JSON
+    //         return $response->json();
+    //     } else {
+    //         // Jika gagal, mengembalikan status dan pesan error
+    //         return [
+    //             'status' => $response->status(),
+    //             'error' => $response->body()
+    //         ];
+    //     }
+    // }
 }

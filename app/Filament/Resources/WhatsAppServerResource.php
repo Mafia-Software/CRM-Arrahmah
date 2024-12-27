@@ -36,7 +36,7 @@ class WhatsAppServerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric(),
-                TextInput::make('delay')->label('delay')->required(),
+                TextInput::make('delay')->label('delay'),
             ]);
     }
 
@@ -48,8 +48,8 @@ class WhatsAppServerResource extends Resource
                     ->searchable(),
                 TextColumn::make('no_wa')
                     ->searchable(),
-                TextColumn::make('instance_id')
-                    ->searchable()->label('Instance ID'),
+                // TextColumn::make('instance_id')
+                //     ->searchable()->label('Instance ID'),
                 IconColumn::make('is_active')->boolean()->label('Status'),
                 TextColumn::make('delay')
                     ->searchable(),
