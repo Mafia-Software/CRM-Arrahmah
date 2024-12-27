@@ -20,7 +20,7 @@ class WhatsAppServerController extends Controller
 
         // 2. Kirim data ke API SentWA (Create Instance)
         try {
-            $response = Http::post('https://new.sentwa.com/api/createinstance.php', [
+            $response = Http::post('http://localhost:3000/api/getQR', [
                 'no_wa' => $validatedData['no_wa'], // Kirim nomor WA ke API
                 'access_token' => env('WABLAST_API_KEY'), // Menggunakan token dari .env
             ]);
@@ -30,13 +30,13 @@ class WhatsAppServerController extends Controller
                 // Pastikan respons mengandung instance_id
                 $responseData = $response->json();
                 
-                if (isset($responseData['instance_id']) && !empty($responseData['instance_id'])) {
-                    $instanceId = $responseData['instance_id'];
+                // if (isset($responseData['instance_id']) && !empty($responseData['instance_id'])) {
+                //     $instanceId = $responseData['instance_id'];
 
                     // 4. Simpan data ke database
                     WhatsAppServer::create([
                         'no_wa' => $validatedData['no_wa'], // Nomor WhatsApp
-                        'instance_id' => $instanceId, // Instance ID dari SentWA
+                        // 'instance_id' => $instanceId, // Instance ID dari SentWA
                     ]);
 
                     // 5. Notifikasi sukses
@@ -44,14 +44,15 @@ class WhatsAppServerController extends Controller
                         ->title('WA Server Created Successfully!')
                         ->success()
                         ->send();
-                } else {
-                    // 6. Jika tidak ada instance_id dalam respons
-                    Notification::make()
-                        ->title('Failed to Create WA Server: No instance_id')
-                        ->danger()
-                        ->send();
-                }
-            } else {
+                } 
+                // else {
+                //     // 6. Jika tidak ada instance_id dalam respons
+                //     Notification::make()
+                //         ->title('Failed to Create WA Server: No instance_id')
+                //         ->danger()
+                //         ->send();
+                // }
+            else {
                 // 7. Jika respons API gagal (status code bukan 2xx)
                 Notification::make()
                     ->title('Failed to Create WA Server: API Error')
