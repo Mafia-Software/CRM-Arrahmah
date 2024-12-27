@@ -17,7 +17,7 @@ class UnitKerjaResource extends Resource
     protected static ?string $model = UnitKerja::class;
     protected static ?string $navigationLabel = 'Unit Kerja';
     protected static ?string $navigationGroup = "Master Data";
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'bi-envelope-paper';
 
     public static function form(Form $form): Form
@@ -50,8 +50,8 @@ class UnitKerjaResource extends Resource
     public static function getRelations(): array
     {
         return [
-                //
-            ];
+            //
+        ];
     }
 
     public static function getPages(): array

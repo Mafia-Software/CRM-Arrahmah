@@ -18,7 +18,9 @@ class HistoryResource extends Resource
     protected static ?string $model = History::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 3;
 
+    protected static ?string $navigationGroup = 'Pesan';
     protected static ?string $navigationLabel = 'Riwayat Blast';
 
     public static function form(Form $form): Form
@@ -45,7 +47,7 @@ class HistoryResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->emptyStateHeading('Belum Ada Riwayat');
     }
 
     public static function getRelations(): array

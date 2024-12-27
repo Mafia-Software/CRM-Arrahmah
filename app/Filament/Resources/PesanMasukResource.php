@@ -19,7 +19,11 @@ class PesanMasukResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Pesan Masuk';
-    protected static ?string $navigationGroup = 'Manajemen Pesan';
+    protected static ?int $navigationSort = 2;
+    protected static ?string $modelLabel = ' Pesan Masuk';
+    protected static ?string $pluralModelLabel = 'Pesan Masuk';
+    protected static ?string $slug = 'custom-url-slug';
+    protected static ?string $navigationGroup = 'Pesan';
 
     public static function form(Form $form): Form
     {
@@ -50,23 +54,20 @@ class PesanMasukResource extends Resource
                 Tables\Columns\TextColumn::make('pesan')->label('Pesan'),
                 Tables\Columns\TextColumn::make('created_at')->label('Dibuat')->dateTime(),
             ])
-            ->filters([
-
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ])->emptyStateHeading('Belum Ada Pesan');
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListPesanMasuks::route('/'),
-            'create' => Pages\CreatePesanMasuk::route('/create'),
             'edit' => Pages\EditPesanMasuk::route('/{record}/edit'),
         ];
     }

@@ -12,7 +12,7 @@ class ContentPlannerResource extends Resource
 {
     protected static ?string $navigationIcon = 'bi-graph-up-arrow';
     protected static ?string $navigationLabel = "Content Planner";
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
     public static function form(Form $form): Form
     {
         return $form;
