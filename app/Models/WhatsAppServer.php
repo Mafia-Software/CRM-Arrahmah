@@ -11,5 +11,6 @@ class WhatsappServer extends Model
         'no_wa',
         'is_active',
         'instance_id',
+        'delay',
     ];
 }
