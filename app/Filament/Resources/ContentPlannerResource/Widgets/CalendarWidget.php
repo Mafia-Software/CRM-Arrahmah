@@ -4,6 +4,8 @@ namespace App\Filament\Resources\ContentPlannerResource\Widgets;
 
 use App\Models\ContentPlanner;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +22,7 @@ class CalendarWidget extends FullCalendarWidget
             ->where('tanggal', '>=', $fetchInfo['start'])
             ->get()
             ->map(
-                fn(ContentPlanner $event) => [
+                fn (ContentPlanner $event) => [
                     'id' => $event->id,
                     'title' => $event->pesan,
                     'start' => $event->tanggal,
@@ -46,13 +48,19 @@ class CalendarWidget extends FullCalendarWidget
     public function getFormSchema(): array
     {
         return [
-            // RichEditor::make('pesan')->required()->toolbarButtons([
-            //     'bold',
-            //     'italic',
-            //     'underline',
-            // ]),
+            RichEditor::make('pesan')->required()->toolbarButtons([
+                'bold',
+                'italic',
+                'underline',
+                'strike'
+            ]),
             TextInput::make('pesan')->required(),
-            DatePicker::make('tanggal')->required()->disabled(),
+            FileUpload::make('media')
+                ->directory('media')
+                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'video/mp4'])
+                ->imageEditor()
+                ->uploadingMessage('Mengupload Media...'),
+            DatePicker::make('tanggal')->required(),
         ];
     }
     protected function headerActions(): array
