@@ -49,7 +49,7 @@ class WhatsappService
 
     public function sendBulkMessage($number, $message, $delay)
     {
-        $url = 'http://waapi.domcloud.dev/api/sendBulkMessage';
+        $url =  $this->wa_endpoint.'sendBulkMessage';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -74,7 +74,7 @@ class WhatsappService
     }
     public function getQR()
     {
-        $url = 'http://waapi.domcloud.dev/api/getQR';
+        $url =  $this->wa_endpoint.'getQR';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -97,7 +97,7 @@ class WhatsappService
 
     public function sendMediaFromUrl($number, $url_file, $as_document)
     {
-        $url = 'http://waapi.domcloud.dev/api/sendMediaFromUrl';
+        $url =  $this->wa_endpoint.'sendMediaFromUrl';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -123,7 +123,7 @@ class WhatsappService
 
     public function addDevice($number, $name_device)
     {
-        $url = 'http://waapi.domcloud.dev/api/addDevice';
+        $url =  $this->wa_endpoint.'addDevice';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -151,7 +151,7 @@ class WhatsappService
 
     public function editDevice($number, $name_device)
     {
-        $url = 'http://waapi.domcloud.dev/api/editDevice';
+        $url =  $this->wa_endpoint.'editDevice';
 
         $response = Http::withOptions([
             "verify" => false,
