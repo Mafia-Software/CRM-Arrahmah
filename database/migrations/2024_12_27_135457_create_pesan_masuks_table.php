@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('pesan_masuks', function (Blueprint $table) {
             $table->id();
-            $table->string("whatsappserverid");
-            $table->id();
-            $table->id();
-            $table->id();
+            $table->string('wa_server_id');
+            $table->text('no_wa');
+            $table->text('pesan');
             $table->timestamps();
         });
     }
