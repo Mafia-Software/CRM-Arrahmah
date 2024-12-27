@@ -6,12 +6,16 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\ContentPlanner;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
+use Filament\Resources\Pages\Page;
+
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-
-use App\Filament\Resources\ContentPlannerResource\Pages;
 use Filament\Forms\Components\RichEditor;
+use App\Filament\Resources\ContentPlannerResource\Pages;
+use App\Filament\Resources\ContentPlannerResource\Widgets\CalendarWidget;
+use App\Filament\Resources\ContentPlannerResource\Pages\ContentPlannerPage;
 
 class ContentPlannerResource extends Resource
 {
@@ -38,27 +42,35 @@ class ContentPlannerResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-                TextColumn::make('id')->sortable()->searchable()->label('ID'),
-                TextColumn::make('pesan')->sortable()->searchable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+    // public static function table(Table $table): Table
+    // {
+    //     return $table
+    //         ->columns([
+    //             //
+    //             TextColumn::make('id')->sortable()->searchable()->label('ID'),
+    //             TextColumn::make('pesan')->sortable()->searchable(),
+    //         ])
+    //         ->filters([
+    //             //
+    //         ])
+    //         ->actions([
+    //             Tables\Actions\EditAction::make(),
+    //         ])
+    //         ->bulkActions([
+    //             Tables\Actions\BulkActionGroup::make([
+    //                 Tables\Actions\DeleteBulkAction::make(),
+    //             ]),
+    //         ]);
+    // }
 
+
+    
+    // public function getWidgets(): array
+    // {
+    //     return Filament::getWidgets();
+        
+    // }
+    
     public static function getRelations(): array
     {
         return [
@@ -72,6 +84,7 @@ class ContentPlannerResource extends Resource
             'index' => Pages\ListContentPlanners::route('/'),
             'create' => Pages\CreateContentPlanner::route('/create'),
             'edit' => Pages\EditContentPlanner::route('/{record}/edit'),
+            // 'index' => Pages\ContentPlannerPage::route('/'),
         ];
     }
 }

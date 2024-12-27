@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\ContentPlannerResource\Pages;
 
-use App\Filament\Resources\ContentPlannerResource;
 use Filament\Actions;
+use Filament\Facades\Filament;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ContentPlannerResource;
+use App\Filament\Resources\ContentPlannerResource\Widgets\CalendarWidget;
 
 class ListContentPlanners extends ListRecords
 {
@@ -16,4 +18,16 @@ class ListContentPlanners extends ListRecords
             // Actions\CreateAction::make()->label('Tambah Content Planner'),
         ];
     }
+    protected function getHeaderWidgets(): array
+    {
+        
+        return [
+            CalendarWidget::class
+        ];
+    }
+
+
+         
+
+   
 }
