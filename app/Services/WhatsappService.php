@@ -22,7 +22,7 @@ class WhatsappService
 
         $response = Http::withOptions([
             "verify" => false,
-        ])->get($url, [
+        ])->post($url, [
             'apiKey' => $this->accessToken,
             'phone' => $number,
             'message' => $message,
@@ -47,7 +47,7 @@ class WhatsappService
 
         $response = Http::withOptions([
             "verify" => false,
-        ])->get($url, [
+        ])->post($url, [
             'apiKey' => $this->accessToken,
             'phone' => $number,
             'message' => $message,
@@ -95,11 +95,90 @@ class WhatsappService
 
         $response = Http::withOptions([
             "verify" => false,
-        ])->get($url, [
+        ])->post($url, [
             'apiKey' => $this->accessToken,
             'phone' => $number,
             'url_file' => $url_file,
             'as_document' => $as_document,
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'error' => $response->body()
+            ];
+        }
+    }
+
+    public function addDevice($number, $name_device, $pair, $tele_id)
+    {
+        $url = 'http://waapi.domcloud.dev/api/addDevice';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->post($url, [
+            'secret' => $this->accessToken,
+            'name' => $name_device,
+            'pair_method' => $pair,
+            'number_hp' => $number,
+            'tele_id' => $tele_id,
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'error' => $response->body()
+            ];
+        }
+    }
+
+    public function editDevice($number, $name_device, $pair, $tele_id)
+    {
+        $url = 'http://waapi.domcloud.dev/api/editDevice';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->post($url, [
+            'secret' => $this->accessToken,
+            'name' => $name_device,
+            'pair_method' => $pair,
+            'number_hp' => $number,
+            'tele_id' => $tele_id,
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'error' => $response->body()
+            ];
+        }
+    }
+
+    public function detailDevice($id_device)
+    {
+        $url = 'http://waapi.domcloud.dev/api/editDevice';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->post($url, [
+            'secret' => $this->accessToken,
+            'id' => $id_device,
+
         ]);
 
         // Memeriksa status dan respons
