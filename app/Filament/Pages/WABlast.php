@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\User;
 use App\Models\Customer;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -34,6 +35,7 @@ class WABlast extends Page implements HasTable, HasForms
     protected static string $view = 'filament.pages.wablast';
 
     public $selectedUnitKerja;
+    public $selectedUser;
 
     public function form(Form $form): Form
     {
@@ -44,6 +46,15 @@ class WABlast extends Page implements HasTable, HasForms
                     'xl' => 6,
                     '2xl' => 8,
                 ])->schema([
+                    Select::make('selectedUser')
+                        ->label('User')
+                        ->options(User::all()->pluck('name', 'id'))
+                        ->columnSpan([
+                            'sm' => 2,
+                            'xl' => 3,
+                            '2xl' => 4,
+                        ])
+                        ->reactive(),
                     Select::make('selectedUnitKerja')
                         ->label('Unit Kerja')
                         ->options(UnitKerja::all()->pluck('name', 'id'))
@@ -55,13 +66,7 @@ class WABlast extends Page implements HasTable, HasForms
                         ->reactive(),
                     Select::make('selectedContentPlanner')
                         ->label('Content Planner')
-                        ->options(
-                            ContentPlanner::all()
-                                ->pluck('pesan', 'id')
-                                ->map(function ($pesan) {
-                                    return strip_tags($pesan); // Bersihkan tag HTML
-                                })
-                        )
+                        ->options(ContentPlanner::all()->pluck('tanggal', 'id'))
                         ->columnSpan([
                             'sm' => 2,
                             'xl' => 3,
@@ -77,6 +82,7 @@ class WABlast extends Page implements HasTable, HasForms
                             '2xl' => 4,
                         ])
                         ->reactive(),
+
                 ])
 
             ]);
@@ -92,7 +98,7 @@ class WABlast extends Page implements HasTable, HasForms
                 TextColumn::make('no_wa')->label('No. Whatsapp'),
             ])
             ->query(function () {
-                return Customer::where('unit_kerja_id', $this->selectedUnitKerja);
+                return Customer::where('user_id', $this->selectedUser)->where('unit_kerja_id', $this->selectedUnitKerja);
             })
             ->actions([
                 DeleteAction::make()
