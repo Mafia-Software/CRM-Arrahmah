@@ -79,11 +79,11 @@ class WhatsAppServerResource extends Resource
                         ->icon('heroicon-s-play')
                         ->action(function ($record) {
                             $wa = new WhatsappController(new WhatsappService());
-                            $wa->startService($record->apiKey);
-                            $state = $wa->getState($record->apiKey);
-                            $record->update(['service_status' => $state->getData()->results->state]);
+                            $wa->startService($record->api_key);
+                            $state = $wa->getState($record->api_key);
+                            $record->update(['service_status' => $state['results']['state']]);
                         })
-                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF'),
+                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF')->after(fn() => $table->dispatch('refresh')),
                     Action::make('pair')
                         ->label('Scan QR')
                         ->color('gray')
