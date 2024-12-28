@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pesan_masuks', function (Blueprint $table) {
-            $table->id();
+            $table->string("id")->primary();
             $table->string('wa_server_id')->constrained('whatsapp_servers');
             $table->text('no_wa');
             $table->text('pesan');
