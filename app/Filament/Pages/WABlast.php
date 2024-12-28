@@ -10,6 +10,8 @@ use App\Models\UnitKerja;
 use Filament\Tables\Table;
 use App\Models\ContentPlanner;
 use App\Models\WhatsappServer;
+use Filament\Actions\Action as ActionsAction;
+use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
@@ -20,11 +22,12 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithRecord;
+use Filament\Actions\Contracts\HasActions;
 
-
-class WABlast extends Page implements HasTable, HasForms
+class WABlast extends Page implements HasTable, HasForms, HasActions
 {
     use InteractsWithTable;
+    use InteractsWithActions;
     use InteractsWithForms;
     use InteractsWithRecord;
     protected static ?string $navigationIcon = 'bi-envelope-arrow-up-fill';
@@ -107,11 +110,18 @@ class WABlast extends Page implements HasTable, HasForms
                     }),
             ]);
     }
+    public function sendAction()
+    {
+        return ActionsAction::make('send')
+            ->requiresConfirmation()
+            ->action(fn() => $this->sendMessage());
+    }
 
     public function sendMessage()
     {
         dd($this->table->getRecords()->toArray());
     }
+
     public $UnitKerja;
     public $ContentPlanner;
 }

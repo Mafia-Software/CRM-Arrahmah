@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Log;
+use App\Models\PesanKeluar;
 use App\Models\PesanMasuk;
 use App\Models\WhatsappServer;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class WebhookController extends Controller
     {
         Log::create([
             'type' => 'webhook',
-            'logs' => request()->all()
+            'logs' => json_encode($request->all())
         ]);
         switch ($request['type']) {
             case 'change_state':
@@ -53,6 +54,7 @@ class WebhookController extends Controller
                 $receiver = substr($receiver, 2);
                 $receiver = Customer::where('no_wa', '0' . $receiver)->first();
                 PesanKeluar::create([
+                    'id' => $request['key']['id'],
                     'id_wapi' => $request['key']['id'],
                     'customer_id' => $receiver->id ?? null,
                     'status' => 1,
