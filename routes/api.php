@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 Route::prefix('wa')->group(function () {
     Route::post('/sendMessage', [App\Http\Controllers\API\WhatsappController::class, 'send']);
 });
+Route::get('/webhook', [App\Http\Controllers\API\WebhookController::class, 'index']);

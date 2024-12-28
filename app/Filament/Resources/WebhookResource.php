@@ -3,20 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WebhookResource\Pages;
-use App\Filament\Resources\WebhookResource\RelationManagers;
-use App\Models\Webhook;
+use App\Models\Log;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WebhookResource extends Resource
 {
-    protected static ?string $model = Webhook::class;
-
+    protected static ?string $model = Log::class;
+    protected static ?string $navigationGroup = 'Master Data';
+    protected static ?int $navigationSort = 3;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -33,14 +32,14 @@ class WebhookResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('id')->label('ID'),
+                TextColumn::make('type')->label('Tipe'),
+                TextColumn::make('logs')->label('Log'),
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
                 //
@@ -66,7 +65,6 @@ class WebhookResource extends Resource
     {
         return [
             'index' => Pages\ListWebhooks::route('/'),
-            // 'edit' => Pages\EditWebhook::route('/{record}/edit'),
         ];
     }
 }

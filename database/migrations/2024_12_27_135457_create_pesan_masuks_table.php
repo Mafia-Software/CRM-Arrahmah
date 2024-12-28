@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('histories', function (Blueprint $table) {
+        Schema::create('pesan_masuks', function (Blueprint $table) {
             $table->id();
-            $table->string("user_id")->constrained('users');
-            $table->string("whatsapp_server_id")->constrained('whatsapp_servers');
+            $table->string('wa_server_id')->constrained('whatsapp_servers');
+            $table->text('no_wa');
+            $table->text('pesan');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('histories');
+        Schema::dropIfExists('pesan_masuks');
     }
 };

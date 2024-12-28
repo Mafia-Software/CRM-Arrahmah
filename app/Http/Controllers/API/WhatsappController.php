@@ -16,30 +16,35 @@ class WhatsappController extends Controller
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function send(Request $request)
+    public function sendMessage(Request $request)
     {
         $validated = $request->validate([
             'number' => 'required',
             'message' => 'required',
-            'instance_id' => 'required',
         ]);
-        $response = $this->whatsAppService->sendMessage($validated['number'], $validated['message'], $validated['instance_id']);
+        $apiKey = 'test';
+        return $this->whatsAppService->sendMessage($apiKey, $validated['number'], $validated['message']);
         // SendWhatsAppMessageJob::dispatch(
         //     $validated['number'],
         //     $validated['message'],
         //     $validated['instance_id']
         // );
-
-        return $response;
+    }
+    public function getQR(string $apiKey)
+    {
+        return $this->whatsAppService->getQR($apiKey);
     }
 
-    public function createInstance()
+    public function sendMediaFromUrl()
     {
-        return $this->whatsAppService->createInstance();
     }
-
-    public function getQR($instance_id)
+    public function addDevice($number, $name_device)
     {
-        return $this->whatsAppService->getQR($instance_id);
+        $apiKey = str()->random();
+        $response = $this->whatsAppService->addDevice($apiKey, $number, $name_device);
+        return response()->json([
+            'response' => $response['status'],
+            'apiKey' => $apiKey
+        ]);
     }
 }

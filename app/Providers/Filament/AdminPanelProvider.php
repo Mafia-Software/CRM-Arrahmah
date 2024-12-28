@@ -25,7 +25,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('')
             ->login()
             ->brandName('CRM')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -59,6 +59,5 @@ class AdminPanelProvider extends PanelProvider
                     ->timezone('Asia/Jakarta')
                     ->locale('id')
             );
-
     }
 }

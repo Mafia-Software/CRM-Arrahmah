@@ -25,6 +25,8 @@ class WhatsAppServerResource extends Resource
 {
     protected static ?string $model = WhatsappServer::class;
     protected static ?string $navigationLabel = "Whatsapp Server";
+    protected static ?string $slug = 'whatsapp-servers';
+
     protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-server-stack';
 
@@ -35,7 +37,12 @@ class WhatsAppServerResource extends Resource
                 TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
+<<<<<<< HEAD
                 TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric() ->rules(['unique:whatsapp,no_wa']),
+=======
+                TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric(),
+                TextInput::make('delay')->label('delay'),
+>>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
             ]);
     }
 
@@ -47,9 +54,11 @@ class WhatsAppServerResource extends Resource
                     ->searchable(),
                 TextColumn::make('no_wa')
                     ->searchable(),
-                TextColumn::make('instance_id')
-                    ->searchable()->label('Instance ID'),
+                // TextColumn::make('instance_id')
+                //     ->searchable()->label('Instance ID'),
                 IconColumn::make('is_active')->boolean()->label('Status'),
+                TextColumn::make('delay')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -65,18 +74,18 @@ class WhatsAppServerResource extends Resource
             ->actions([
                 ActionGroup::make([
                     Action::make('connect')
-                        ->label(fn($record) => match ($record->is_active) {
+                        ->label(fn ($record) => match ($record->is_active) {
                             0 => 'Scan QR',
                             1 => 'Putuskan',
                             default => null,
                         })
-                        ->icon(fn($record) => match ($record->is_active) {
+                        ->icon(fn ($record) => match ($record->is_active) {
                             0 => 'heroicon-o-qr-code',
                             1 => 'heroicon-o-x-circle',
                             default => null,
                         })->modalContent(function ($record): View {
-                            $wa = new WhatsappController(new WhatsappService);
-                            $qr = $wa->getQR($record->instance_id);
+                            $wa = new WhatsappController(new WhatsappService());
+                            $qr = $wa->getQR($record->apiKey);
                             if ($qr['status'] == 'success') {
                                 $qrCode = substr($qr['base64'], strpos($qr['base64'], ',') + 1);
                                 Storage::disk('local')->put("test.png", base64_decode($qrCode));
@@ -102,7 +111,7 @@ class WhatsAppServerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->emptyStateHeading('Belum Ada Whatsapp Server');
     }
 
     public static function getRelations(): array

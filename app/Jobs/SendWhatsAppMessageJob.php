@@ -22,12 +22,12 @@ class SendWhatsAppMessageJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(string $number, string $message, string $instanceId)
+    public function __construct(string $number, string $message)
     {
         //
         $this->number = $number;
         $this->message = $message;
-        $this->instanceId = $instanceId;
+        // $this->instanceId = $instanceId;
     }
 
     /**
@@ -39,7 +39,7 @@ class SendWhatsAppMessageJob implements ShouldQueue
         $WhatsAppService->sendMessage(
             $this->number,
             $this->message,
-            $this->instanceId
+            // $this->instanceId
 
         );
     }

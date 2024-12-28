@@ -15,7 +15,7 @@ use App\Filament\Resources\ResponseResource\Pages;
 class ResponseResource extends Resource
 {
     protected static ?string $model = Response::class;
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'bi-graph-up-arrow';
     protected static ?string $navigationGroup = 'Master Data';
 
@@ -49,8 +49,8 @@ class ResponseResource extends Resource
     public static function getRelations(): array
     {
         return [
-                //
-            ];
+            //
+        ];
     }
 
     public static function getPages(): array

@@ -10,6 +10,11 @@ class WhatsappServer extends Model
         'nama',
         'no_wa',
         'is_active',
-        'instance_id',
+        'delay',
     ];
+
+    public function getDelayAttribute($value)
+    {
+        return $value . ' detik';
+    }
 }

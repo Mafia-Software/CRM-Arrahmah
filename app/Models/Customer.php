@@ -15,6 +15,7 @@ class Customer extends Model
         'no_wa',
         'unit_kerja_id',
         'response_id',
+        'user_id',
 
     ];
 
@@ -27,5 +28,10 @@ class Customer extends Model
     public function response()
     {
         return $this->belongsTo(Response::class, 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id');
     }
 }
