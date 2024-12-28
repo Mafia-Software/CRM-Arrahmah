@@ -102,9 +102,16 @@ class WhatsAppServerResource extends Resource
                         ->label('Hentikan')
                         ->color('danger')
                         ->icon('heroicon-s-stop')
-                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_ON'),
+                        ->hidden(fn($record) => $record->service_status === 'SERVICE_OFF'),
                     EditAction::make(),
-                    DeleteAction::make(),
+                    DeleteAction::make()->before(function (DeleteAction $action, $record) {
+                        $wa = new WhatsappController(new WhatsappService());
+                        $res = $wa->deleteDevice($record->api_key);
+                        if ($res->getData()->status != true) {
+                            Notification::make()->danger()->title('Error')->body($res->getData()->message)->send();
+                            $action->cancel();
+                        }
+                    }),
                 ])
             ])
             ->bulkActions([
