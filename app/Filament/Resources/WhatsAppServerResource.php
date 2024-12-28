@@ -37,12 +37,8 @@ class WhatsAppServerResource extends Resource
                 TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
-<<<<<<< HEAD
-                TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric() ->rules(['unique:whatsapp,no_wa']),
-=======
                 TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric(),
                 TextInput::make('delay')->label('delay'),
->>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
             ]);
     }
 
