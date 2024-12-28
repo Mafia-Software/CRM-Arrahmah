@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
@@ -22,87 +23,109 @@ class WhatsappService
         $this->webhook_url = Config::get('custom.webhook_url');
     }
 
-    public function sendMessage($number, $message)
+    public function sendMessage($apiKey, $number, $message)
     {
         $url = $this->wa_endpoint.'sendMessage';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'apiKey' => $this->wa_api,
+            'apiKey' => $apiKey,
             'phone' => $number,
             'message' => $message,
         ]);
 
         // Memeriksa status dan respons
         if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
 
-    public function sendBulkMessage($number, $message, $delay)
+    public function sendBulkMessage($apiKey, $number, $message)
     {
         $url =  $this->wa_endpoint.'sendBulkMessage';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'apiKey' => $this->wa_api,
+            'apiKey' => $apiKey,
             'phone' => $number,
             'message' => $message,
-            'delay' => $delay,
         ]);
-
         // Memeriksa status dan respons
         if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
-    public function getQR()
+    public function getQR($apiKey)
     {
         $url =  $this->wa_endpoint.'getQR';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
-            'apiKey' => $this->wa_api
+            'apiKey' => $apiKey
         ]);
 
         // Memeriksa status dan respons
         if ($response->successful()) {
             // Jika berhasil, mengembalikan respons JSON
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
 
-    public function sendMediaFromUrl($number, $url_file, $as_document)
+    public function sendMediaFromUrl($apiKey, $number, $url_file, $as_document)
     {
         $url =  $this->wa_endpoint.'sendMediaFromUrl';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
-            'apiKey' => $this->wa_api,
+            'apiKey' => $apiKey,
             'phone' => $number,
             'url_file' => $url_file,
             'as_document' => $as_document,
@@ -110,18 +133,26 @@ class WhatsappService
 
         // Memeriksa status dan respons
         if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
 
-    public function addDevice($number, $name_device)
+    public function addDevice($apiKey, $number, $name_device)
     {
         $url =  $this->wa_endpoint.'addDevice';
 
@@ -130,6 +161,7 @@ class WhatsappService
         ])->post($url, [
             'secret' => $this->wa_api,
             'name' => $name_device,
+            'apiKey' => $apiKey,
             'pair_method' => 1,
             'number_hp' => $number,
             'tele_id' => $this->telegram_token,
@@ -138,13 +170,21 @@ class WhatsappService
 
         // Memeriksa status dan respons
         if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
@@ -166,20 +206,28 @@ class WhatsappService
 
         // Memeriksa status dan respons
         if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
 
     public function detailDevice($id_device)
     {
-        $url = 'http://waapi.domcloud.dev/api/editDevice';
+        $url = $this->wa_endpoint.'editDevice';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -191,13 +239,21 @@ class WhatsappService
 
         // Memeriksa status dan respons
         if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika berhasil, mengembalikan respons JSON
             return $response->json();
         } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
             // Jika gagal, mengembalikan status dan pesan error
             return [
                 'status' => $response->status(),
-                'error' => $response->body()
+                'msg' => $response->body()
             ];
         }
     }
