@@ -10,7 +10,6 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 
-
 class CreateWhatsAppServer extends CreateRecord
 {
     protected static string $resource = WhatsAppServerResource::class;
@@ -21,16 +20,17 @@ class CreateWhatsAppServer extends CreateRecord
         return static::getResource()::getUrl('index');
     }
 
-    // protected function handleRecordCreation(array $data): Model
-    // {
-    //     $wa = new WhatsappController(new WhatsappService);
-    //     $response = $wa->createInstance();
-    //     if ($response['instance_id'] == null) {
-    //         Notification::make()->danger()->title('Error')->body($response['error'])->send();
-    //         $this->cancel();
-    //     }
-    //     $data['instance_id'] = $response['instance_id'];
+    protected function handleRecordCreation(array $data): Model
+    {
+        $wa = new WhatsappController(new WhatsappService());
+        $response = $wa->addDevice($data['no_wa'], $data['nama']);
+        if ($response['status'] != true) {
+            Notification::make()->danger()->title('Error')->body($response['error'])->send();
+            $this->cancel();
+        }
+        $data['apiKey'] = $response['apiKey'];
 
-    //     return static::getModel()::create($data);
+        return static::getModel()::create($data);
+    }
 
 }

@@ -81,7 +81,7 @@ class WhatsAppServerResource extends Resource
                             default => null,
                         })->modalContent(function ($record): View {
                             $wa = new WhatsappController(new WhatsappService());
-                            $qr = $wa->getQR($record->instance_id);
+                            $qr = $wa->getQR($record->apiKey);
                             if ($qr['status'] == 'success') {
                                 $qrCode = substr($qr['base64'], strpos($qr['base64'], ',') + 1);
                                 Storage::disk('local')->put("test.png", base64_decode($qrCode));
