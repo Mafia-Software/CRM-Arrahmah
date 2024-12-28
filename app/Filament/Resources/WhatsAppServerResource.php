@@ -13,7 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -46,30 +48,16 @@ class WhatsAppServerResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama')
-                    ->searchable(),
-                TextColumn::make('no_wa')->label('No. Whatsapp')
-                    ->searchable(),
-                // TextColumn::make('instance_id')
-                //     ->searchable()->label('Instance ID'),
+                TextColumn::make('nama'),
+                TextColumn::make('no_wa')->label('No. Whatsapp'),
                 TextColumn::make('delay'),
                 TextColumn::make('service_status')->label('Status')->badge()->color(fn(string $state): string => match ($state) {
                     'SERVICE_OFF' => 'gray',
+                    'PAIRING' => 'warning',
                     'SERVICE_SCAN' => 'warning',
                     'SERVICE_ON' => 'success',
                 }),
                 IconColumn::make('is_active')->boolean()->label('Terhubung?'),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
             ])
             ->actions([
                 ActionGroup::make([
@@ -77,13 +65,12 @@ class WhatsAppServerResource extends Resource
                         ->label('Mulai')
                         ->color('success')
                         ->icon('heroicon-s-play')
-                        ->action(function ($record) {
+                        ->action(function ($record, $livewire) {
                             $wa = new WhatsappController(new WhatsappService());
                             $wa->startService($record->api_key);
-                            $state = $wa->getState($record->api_key);
-                            $record->update(['service_status' => $state['results']['state']]);
+                            $livewire->getTableRecords()->fresh();
                         })
-                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF')->after(fn() => $table->dispatch('refresh')),
+                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF'),
                     Action::make('pair')
                         ->label('Scan QR')
                         ->color('gray')
@@ -107,7 +94,10 @@ class WhatsAppServerResource extends Resource
                         ->modalWidth('sm')
                         ->modalSubmitAction(false)
                         ->modalCancelAction(false)
-                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_SCAN'),
+                        ->hidden(function ($record) {
+                            if ($record->service_status != 'SERVICE_SCAN' || $record->service_status != 'PAIRING')
+                                return true;
+                        }),
                     Action::make('stop')
                         ->label('Hentikan')
                         ->color('danger')
@@ -118,8 +108,8 @@ class WhatsAppServerResource extends Resource
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])->emptyStateHeading('Belum Ada Whatsapp Server');
     }
