@@ -6,9 +6,16 @@ use App\Filament\Resources\PesanMasukResource\Pages;
 use App\Filament\Resources\PesanMasukResource\RelationManagers;
 use App\Models\PesanMasuk;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -27,37 +34,24 @@ class PesanMasukResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('wa_server_id')
-                    ->label('WA Server ID'),
-
-
-                Forms\Components\TextInput::make('no_wa')
-                    ->label('Nomor WhatsApp')
-                    ->required()
-                    ->maxLength(15),
-                Forms\Components\Textarea::make('pesan')
-                    ->label('Pesan')
-                    ->required()
-                    ->maxLength(500),
-            ]);
+        return $form;
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
-                Tables\Columns\TextColumn::make('wa_server_id')->label('WA Server ID'),
-                Tables\Columns\TextColumn::make('no_wa')->label('Nomor WhatsApp'),
-                Tables\Columns\TextColumn::make('pesan')->label('Pesan'),
-                Tables\Columns\TextColumn::make('created_at')->label('Dibuat')->dateTime(),
+                TextColumn::make('id')->label('ID')->sortable(),
+                TextColumn::make('wa_server_id')->label('WA Server ID'),
+                TextColumn::make('no_wa')->label('No. WhatsApp'),
+                TextColumn::make('pesan')->label('Pesan'),
+                ImageColumn::make('media')->label('Media'),
+                TextColumn::make('created_at')->label('Dibuat')->dateTime(),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
