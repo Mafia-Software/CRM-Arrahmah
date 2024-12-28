@@ -22,7 +22,7 @@ class CalendarWidget extends FullCalendarWidget
             ->where('tanggal', '>=', $fetchInfo['start'])
             ->get()
             ->map(
-                fn (ContentPlanner $event) => [
+                fn(ContentPlanner $event) => [
                     'id' => $event->id,
                     'title' => $event->pesan,
                     'start' => $event->tanggal,
@@ -60,7 +60,7 @@ class CalendarWidget extends FullCalendarWidget
                 ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'video/mp4'])
                 ->imageEditor()
                 ->uploadingMessage('Mengupload Media...'),
-            DatePicker::make('tanggal')->required(),
+            DatePicker::make('tanggal')->required()->readOnly(),
         ];
     }
     protected function headerActions(): array

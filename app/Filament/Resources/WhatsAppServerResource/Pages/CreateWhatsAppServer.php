@@ -25,12 +25,11 @@ class CreateWhatsAppServer extends CreateRecord
         $wa = new WhatsappController(new WhatsappService());
         $response = $wa->addDevice($data['no_wa'], $data['nama']);
         if ($response->getData()->status != true) {
-            Notification::make()->danger()->title('Error')->body($response['error'])->send();
-            $this->cancel();
+            Notification::make()->danger()->title('Error')->body($response->getData()->message)->send();
+            $this->halt();
         }
         $data['api_key'] = $response->getData()->apiKey;
         $data['service_status'] = 'SERVICE_OFF';
         return static::getModel()::create($data);
     }
-
 }

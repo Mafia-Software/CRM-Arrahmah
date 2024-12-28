@@ -10,7 +10,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -21,7 +20,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Storage;
+
 
 class WhatsAppServerResource extends Resource
 {
@@ -58,17 +57,18 @@ class WhatsAppServerResource extends Resource
                     'SERVICE_ON' => 'success',
                 }),
                 IconColumn::make('is_active')->boolean()->label('Terhubung?'),
-            ])
+            ])->poll('5s')
             ->actions([
                 ActionGroup::make([
                     Action::make('start')
                         ->label('Mulai')
                         ->color('success')
                         ->icon('heroicon-s-play')
-                        ->action(function ($record, $livewire) {
+                        ->action(function ($record) {
                             $wa = new WhatsappController(new WhatsappService());
                             $wa->startService($record->api_key);
-                            $livewire->getTableRecords()->fresh();
+                        })->after(function ($record) {
+                            $record->refresh();
                         })
                         ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF'),
                     Action::make('pair')
@@ -102,9 +102,23 @@ class WhatsAppServerResource extends Resource
                         ->label('Hentikan')
                         ->color('danger')
                         ->icon('heroicon-s-stop')
-                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_ON'),
+                        ->action(function ($record) {
+                            $wa = new WhatsappController(new WhatsappService());
+                            $wa->stopService($record->api_key);
+                        })
+                        ->after(function ($record) {
+                            $record->refresh();
+                        })
+                        ->hidden(fn($record) => $record->service_status === 'SERVICE_OFF'),
                     EditAction::make(),
-                    DeleteAction::make(),
+                    DeleteAction::make()->before(function (DeleteAction $action, $record) {
+                        $wa = new WhatsappController(new WhatsappService());
+                        $res = $wa->deleteDevice($record->api_key);
+                        if ($res->getData()->status != true) {
+                            Notification::make()->danger()->title('Error')->body($res->getData()->message)->send();
+                            $action->cancel();
+                        }
+                    }),
                 ])
             ])
             ->bulkActions([

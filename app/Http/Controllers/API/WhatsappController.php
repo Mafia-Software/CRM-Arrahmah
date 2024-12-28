@@ -22,7 +22,7 @@ class WhatsappController extends Controller
             'number' => 'required',
             'message' => 'required',
         ]);
-        $apiKey = 'test';
+        $apiKey = $request->input('apiKey');
         return $this->whatsAppService->sendMessage($apiKey, $validated['number'], $validated['message']);
         // SendWhatsAppMessageJob::dispatch(
         //     $validated['number'],
@@ -54,9 +54,42 @@ class WhatsappController extends Controller
     {
         $apiKey = str()->random();
         $response = $this->whatsAppService->addDevice($apiKey, $number, $name_device);
-        return response()->json([
-            'status' => $response['status'],
-            'apiKey' => $apiKey
-        ]);
+        return response()->json(['status' => $response['status'], 'message' => $response['message'], 'apiKey' => $apiKey]);
+    }
+    public function stopService($apiKey)
+    {
+        return $this->whatsAppService->stopService($apiKey);
+    }
+
+    public function searchIdfromArray($response, $apiKey)
+    {
+        $id_device = null;
+        foreach ($response['data'] as $account) {
+            if ($account['apiKey'] === $apiKey) {
+                $id_device = $account['id'];
+                break;
+            }
+        }
+        return $id_device;
+    }
+    public function deleteDevice($apiKey)
+    {
+        $response = $this->whatsAppService->listDevice();
+        $id = $this->searchIdfromArray($response, $apiKey);
+        $response = $this->whatsAppService->deleteDevice($id);
+        if (isset($response['status'])) {
+            return response()->json(['status' => $response['status'], 'message' => $response['message']]);
+        }
+        return response()->json(['status' => false, 'message' => 'Error Menghapus Device']);
+    }
+    public function listDevices()
+    {
+        $response = $this->whatsAppService->listDevice();
+        return response()->json($response);
+    }
+
+    public function detailDevice($id_device)
+    {
+        return $this->whatsAppService->detailDevice($id_device);
     }
 }

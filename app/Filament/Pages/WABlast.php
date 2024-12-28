@@ -18,7 +18,6 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithRecord;
@@ -100,26 +99,28 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                 TextColumn::make('alamat'),
                 TextColumn::make('no_wa')->label('No. Whatsapp'),
             ])
+            ->emptyStateHeading('Silahkan Pilih Unit Kerja dan User')
             ->query(function () {
+
                 return Customer::where('user_id', $this->selectedUser)->where('unit_kerja_id', $this->selectedUnitKerja);
             })
             ->actions([
-                DeleteAction::make()
-                    ->action(function (DeleteAction $action) use ($table) {
-                        $recordId = $action->getRecord()->id;
-                    }),
+                // DeleteAction::make()
+                //     ->action(function (DeleteAction $action) use ($table) {
+                //         $recordId = $action->getRecord()->id;
+                //     }),
             ]);
     }
     public function sendAction()
     {
         return ActionsAction::make('send')
-            ->requiresConfirmation()
+            ->requiresConfirmation()->label('Kirim Pesan')
             ->action(fn() => $this->sendMessage());
     }
 
     public function sendMessage()
     {
-        dd($this->table->getRecords()->toArray());
+        dd($this->table->getRecords()->pluck('no_wa')->toArray());
     }
 
     public $UnitKerja;

@@ -21,17 +21,16 @@ class Customer extends Model
 
     public function unitKerja()
     {
-
-        return $this->belongsTo(UnitKerja::class, 'id');
+        return $this->belongsTo(UnitKerja::class);
     }
 
     public function response()
     {
-        return $this->belongsTo(Response::class, 'id');
+        return $this->belongsTo(Response::class);
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class);
     }
 }
