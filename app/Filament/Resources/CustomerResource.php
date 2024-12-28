@@ -35,11 +35,7 @@ class CustomerResource extends Resource
                             ->relationship('UnitKerja', 'name'),
                         Select::make('response')
                             ->relationship('Response', 'name'),
-<<<<<<< HEAD
-                             
-=======
                         Select::make('user_id')->label('User')->relationship('user', 'name'),
->>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
                     ])
                     ->columns(1),
             ]);
