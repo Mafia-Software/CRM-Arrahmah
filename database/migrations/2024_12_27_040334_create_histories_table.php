@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("user_id")->constrained('users');
             $table->string("whatsapp_server_id")->constrained('whatsapp_servers');
+            $table->string('content_planner_id')->nullable()->constrained('content_planners');
             $table->timestamps();
         });
     }
