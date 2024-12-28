@@ -25,7 +25,7 @@ class WhatsappService
 
     public function sendMessage($apiKey, $number, $message)
     {
-        $url = $this->wa_endpoint.'sendMessage';
+        $url = $this->wa_endpoint . 'sendMessage';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -58,7 +58,7 @@ class WhatsappService
 
     public function sendBulkMessage($apiKey, $number, $message)
     {
-        $url =  $this->wa_endpoint.'sendBulkMessage';
+        $url =  $this->wa_endpoint . 'sendBulkMessage';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -89,7 +89,7 @@ class WhatsappService
     }
     public function getQR($apiKey)
     {
-        $url =  $this->wa_endpoint.'getQR';
+        $url =  $this->wa_endpoint . 'getQR';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -120,7 +120,7 @@ class WhatsappService
 
     public function sendMediaFromUrl($apiKey, $number, $url_file, $as_document)
     {
-        $url =  $this->wa_endpoint.'sendMediaFromUrl';
+        $url =  $this->wa_endpoint . 'sendMediaFromUrl';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -154,7 +154,7 @@ class WhatsappService
 
     public function addDevice($apiKey, $number, $name_device)
     {
-        $url =  $this->wa_endpoint.'addDevice';
+        $url =  $this->wa_endpoint . 'addDevice';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -162,7 +162,7 @@ class WhatsappService
             'secret' => $this->wa_api,
             'name' => $name_device,
             'apiKey' => $apiKey,
-            'pair_method' => 1,
+            'pair_method' => 'qr',
             'number_hp' => $number,
             'tele_id' => $this->telegram_token,
             'webhook_url' => $this->webhook_url
@@ -191,14 +191,14 @@ class WhatsappService
 
     public function editDevice($number, $name_device)
     {
-        $url =  $this->wa_endpoint.'editDevice';
+        $url =  $this->wa_endpoint . 'editDevice';
 
         $response = Http::withOptions([
             "verify" => false,
         ])->post($url, [
             'secret' => $this->wa_api,
             'name' => $name_device,
-            'pair_method' => 1,
+            'pair_method' => 'qr',
             'number_hp' => $number,
             'tele_id' => $this->telegram_token,
             'webhook_url' => $this->webhook_url
@@ -227,7 +227,7 @@ class WhatsappService
 
     public function detailDevice($id_device)
     {
-        $url = $this->wa_endpoint.'editDevice';
+        $url = $this->wa_endpoint . 'editDevice';
 
         $response = Http::withOptions([
             "verify" => false,
@@ -235,6 +235,91 @@ class WhatsappService
             'secret' => $this->wa_api,
             'id' => $id_device,
 
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'msg' => $response->body()
+            ];
+        }
+    }
+
+    public function getState($apiKey)
+    {
+        $url = $this->wa_endpoint . 'getState';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'apiKey' => $apiKey
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'msg' => $response->body()
+            ];
+        }
+    }
+    public function startService($apiKey)
+    {
+        $url = $this->wa_endpoint . 'serviceStart';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'apiKey' => $apiKey
+        ]);
+
+        // Memeriksa status dan respons
+        if ($response->successful()) {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
+            // Jika berhasil, mengembalikan respons JSON
+            return $response->json();
+        } else {
+            Log::create([
+                'type' => 'api_return',
+                'logs' => $response->body()
+            ]);
+            // Jika gagal, mengembalikan status dan pesan error
+            return [
+                'status' => $response->status(),
+                'msg' => $response->body()
+            ];
+        }
+    }
+
+    public function stopService($apiKey)
+    {
+        $url = $this->wa_endpoint . 'serviceDestroy';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'apiKey' => $apiKey
         ]);
 
         // Memeriksa status dan respons
