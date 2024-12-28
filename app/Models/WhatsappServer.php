@@ -9,6 +9,8 @@ class WhatsappServer extends Model
     protected $fillable = [
         'nama',
         'no_wa',
+        'api_key',
+        'service_status',
         'is_active',
         'delay',
     ];
