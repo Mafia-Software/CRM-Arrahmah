@@ -23,6 +23,17 @@ class WhatsappService
         $this->webhook_url = Config::get('custom.webhook_url');
     }
 
+<<<<<<< HEAD
+    public function sendMessage($phone, $message)
+    {
+        $url = 'http://localhost:3000/api/sendMessage';
+
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'apiKey' => $this->accessToken,
+            'number' => $phone,
+=======
     public function sendMessage($apiKey, $number, $message)
     {
         $url = $this->wa_endpoint . 'sendMessage';
@@ -32,6 +43,7 @@ class WhatsappService
         ])->post($url, [
             'apiKey' => $apiKey,
             'phone' => $number,
+>>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
             'message' => $message,
         ]);
 
@@ -55,6 +67,11 @@ class WhatsappService
             ];
         }
     }
+<<<<<<< HEAD
+    public function getQR()
+    {
+        $url = 'http://localhost:3000/api/getQR';
+=======
 
     public function sendBulkMessage($apiKey, $number, $message)
     {
@@ -89,12 +106,18 @@ class WhatsappService
     }
     public function getQR($apiKey)
     {
-        $url =  $this->wa_endpoint . 'getQR';
+        $url =  $this->wa_endpoint.'getQR';
+>>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
 
         $response = Http::withOptions([
             "verify" => false,
         ])->get($url, [
+<<<<<<< HEAD
+            // 'instance_id' => $instance_id,
+            'apiKey' => $this->accessToken
+=======
             'apiKey' => $apiKey
+>>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
         ]);
 
         // Memeriksa status dan respons
@@ -117,6 +140,18 @@ class WhatsappService
             ];
         }
     }
+<<<<<<< HEAD
+    // public function createInstance()
+    // {
+    //     $url = 'https://new.sentwa.com/api/createinstance.php';
+
+    //     $response = Http::withOptions([
+    //         "verify" => false,
+    //     ])->get($url, [
+    //         'access_token' => $this->accessToken
+    //     ]);
+
+=======
 
     public function sendMediaFromUrl($apiKey, $number, $url_file, $as_document)
     {
@@ -354,6 +389,7 @@ class WhatsappService
     //         'access_token' => $this->wa_api
     //     ]);
 
+>>>>>>> b01659fe1f5a138196f843b908b1420c47105e10
     //     // Memeriksa status dan respons
     //     if ($response->successful()) {
     //         // Jika berhasil, mengembalikan respons JSON
