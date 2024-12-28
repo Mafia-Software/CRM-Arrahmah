@@ -32,7 +32,12 @@ class WhatsappController extends Controller
     }
     public function getQR(string $apiKey)
     {
-        return $this->whatsAppService->getQR($apiKey);
+        $response = $this->whatsAppService->getQR($apiKey);
+
+        return response()->json([
+            'status' => $response['code'],
+            'qr' => $response['results']['qrString']
+        ]);
     }
 
     public function sendMediaFromUrl() {}
