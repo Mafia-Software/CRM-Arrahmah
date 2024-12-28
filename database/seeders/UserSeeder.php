@@ -19,9 +19,23 @@ class UserSeeder extends Seeder
                 'email' => 'mamat@a.com',
                 'password' => Hash::make('mamat'), // Gunakan Hash::make untuk mengenkripsi password
             ],
+            [
+                'name' => 'rusdi',
+                'email' => 'rusdi@a.com',
+                'password' => Hash::make('rusdi'), // Gunakan Hash::make untuk mengenkripsi password
+            ],
         ];
 
 
-        DB::table('users')->insert($data);
+        foreach ($data as $user) {
+            DB::table('users')->updateOrInsert(
+                ['email' => $user['email']], // Kondisi unik untuk pencarian
+                [
+                    'name' => $user['name'],
+                    'password' => $user['password'],
+                    'updated_at' => now(), // Tambahkan waktu pembaruan
+                ]
+            );
+        }
     }
 }
