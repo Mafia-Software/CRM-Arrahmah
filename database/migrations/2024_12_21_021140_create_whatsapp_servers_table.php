@@ -14,8 +14,9 @@ return new class () extends Migration {
             $table->id();
             $table->string('nama');
             $table->string('no_wa');
-            $table->string('apiKey');
+            $table->string('api_key');
             $table->integer('delay');
+            $table->string('service_status');
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
