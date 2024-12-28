@@ -90,22 +90,21 @@ class WhatsAppServerResource extends Resource
                         ->icon('heroicon-o-qr-code')
                         ->modalContent(function ($record): View {
                             $wa = new WhatsappController(new WhatsappService());
-                            $qr = $wa->getQR($record->apiKey);
-                            if ($qr == 'success') {
-                                $qrCode = substr($qr['base64'], strpos($qr['base64'], ',') + 1);
-                                Storage::disk('local')->put("test.png", base64_decode($qrCode));
+                            $qr = $wa->getQR($record->api_key);
+                            if ($qr->getData()->status == 200) {
+                                $qrCode = substr($qr->getData()->qr, strpos($qr->getData()->qr, ',') + 1);
                                 session()->put('qr', $qrCode);
                             } else {
                                 Notification::make()
                                     ->title('Gagal Mendapatkan QR')
                                     ->danger()
-                                    ->body($qr['message'])
                                     ->send();
                             }
                             $qrCode = session()->get('qr');
                             session()->forget('qr');
                             return view('filament.pages.components.qr-modal', ['qr' => $qrCode]);
-                        })
+                        })->modalAlignment('center')
+                        ->modalWidth('sm')
                         ->modalSubmitAction(false)
                         ->modalCancelAction(false)
                         ->hidden(fn($record) => $record->service_status !== 'SERVICE_SCAN'),
