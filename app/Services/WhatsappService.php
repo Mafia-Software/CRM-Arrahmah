@@ -165,7 +165,10 @@ class WhatsappService
             'pair_method' => 'qr',
             'number_hp' => $number,
             'tele_id' => $this->telegram_token,
-            'webhook_url' => $this->webhook_url
+            'webhook_url' => $this->webhook_url,
+            'webhook_status' => 1,
+            'autostart_status' => 1
+
         ]);
 
         // Memeriksa status dan respons
@@ -224,7 +227,17 @@ class WhatsappService
             ];
         }
     }
+    public function deleteDevice($id_device)
+    {
+        $url = $this->wa_endpoint . 'deleteDevice';
 
+        $response = Http::withOptions([
+            "verify" => false,
+        ])->get($url, [
+            'secret' => $this->wa_api,
+            'id' => $id_device
+        ]);
+    }
     public function detailDevice($id_device)
     {
         $url = $this->wa_endpoint . 'editDevice';
