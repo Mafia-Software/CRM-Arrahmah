@@ -11,5 +11,11 @@ class ContentPlanner extends Model
         "id",
         "pesan",
         'tanggal',
+        'media',
     ];
+
+    public function getCleanTextAttribute()
+    {
+        return strip_tags($this->pesan);
+    }
 }
