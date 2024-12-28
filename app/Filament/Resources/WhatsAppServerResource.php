@@ -48,13 +48,17 @@ class WhatsAppServerResource extends Resource
             ->columns([
                 TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('no_wa')
+                TextColumn::make('no_wa')->label('No. Whatsapp')
                     ->searchable(),
                 // TextColumn::make('instance_id')
                 //     ->searchable()->label('Instance ID'),
-                IconColumn::make('is_active')->boolean()->label('Status'),
-                TextColumn::make('delay')
-                    ->searchable(),
+                TextColumn::make('delay'),
+                TextColumn::make('service_status')->label('Status')->badge()->color(fn(string $state): string => match ($state) {
+                    'SERVICE_OFF' => 'gray',
+                    'SERVICE_SCAN' => 'warning',
+                    'SERVICE_ON' => 'success',
+                }),
+                IconColumn::make('is_active')->boolean()->label('Terhubung?'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -69,20 +73,25 @@ class WhatsAppServerResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Action::make('connect')
-                        ->label(fn ($record) => match ($record->is_active) {
-                            0 => 'Scan QR',
-                            1 => 'Putuskan',
-                            default => null,
+                    Action::make('start')
+                        ->label('Mulai')
+                        ->color('success')
+                        ->icon('heroicon-s-play')
+                        ->action(function ($record) {
+                            $wa = new WhatsappController(new WhatsappService());
+                            $wa->startService($record->apiKey);
+                            $state = $wa->getState($record->apiKey);
+                            $record->update(['service_status' => $state->getData()->results->state]);
                         })
-                        ->icon(fn ($record) => match ($record->is_active) {
-                            0 => 'heroicon-o-qr-code',
-                            1 => 'heroicon-o-x-circle',
-                            default => null,
-                        })->modalContent(function ($record): View {
+                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF'),
+                    Action::make('pair')
+                        ->label('Scan QR')
+                        ->color('gray')
+                        ->icon('heroicon-o-qr-code')
+                        ->modalContent(function ($record): View {
                             $wa = new WhatsappController(new WhatsappService());
                             $qr = $wa->getQR($record->apiKey);
-                            if ($qr['status'] == 'success') {
+                            if ($qr == 'success') {
                                 $qrCode = substr($qr['base64'], strpos($qr['base64'], ',') + 1);
                                 Storage::disk('local')->put("test.png", base64_decode($qrCode));
                                 session()->put('qr', $qrCode);
@@ -98,7 +107,13 @@ class WhatsAppServerResource extends Resource
                             return view('filament.pages.components.qr-modal', ['qr' => $qrCode]);
                         })
                         ->modalSubmitAction(false)
-                        ->modalCancelAction(false),
+                        ->modalCancelAction(false)
+                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_SCAN'),
+                    Action::make('stop')
+                        ->label('Hentikan')
+                        ->color('danger')
+                        ->icon('heroicon-s-stop')
+                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_ON'),
                     EditAction::make(),
                     DeleteAction::make(),
                 ])
