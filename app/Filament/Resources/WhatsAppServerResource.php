@@ -57,7 +57,7 @@ class WhatsAppServerResource extends Resource
                     'SERVICE_ON' => 'success',
                 }),
                 IconColumn::make('is_active')->boolean()->label('Terhubung?'),
-            ])
+            ])->poll('5s')
             ->actions([
                 ActionGroup::make([
                     Action::make('start')
