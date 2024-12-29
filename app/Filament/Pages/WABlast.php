@@ -58,39 +58,43 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                     Select::make('selectedUser')
                         ->label('User')
                         ->options(User::all()->pluck('name', 'id'))
+                        ->default(null)
                         ->columnSpan([
                             'sm' => 2,
                             'xl' => 3,
                             '2xl' => 4,
                         ])
-                        ->reactive(),
+                        ->reactive()->required(),
                     Select::make('selectedUnitKerja')
                         ->label('Unit Kerja')
                         ->options(UnitKerja::all()->pluck('name', 'id'))
+                        ->default(null)
                         ->columnSpan([
                             'sm' => 2,
                             'xl' => 3,
                             '2xl' => 4,
                         ])
-                        ->reactive(),
+                        ->reactive()->required(),
                     Select::make('selectedContentPlanner')
                         ->label('Content Planner')
                         ->options(ContentPlanner::all()->pluck('tanggal', 'id'))
+                        ->default(null)
                         ->columnSpan([
                             'sm' => 2,
                             'xl' => 3,
                             '2xl' => 4,
                         ])
-                        ->reactive(),
+                        ->reactive()->required(),
                     Select::make('selectedWhatsappServer')
                         ->label('Wangsaff Server')
                         ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
+                        ->default(null)
                         ->columnSpan([
                             'sm' => 2,
                             'xl' => 3,
                             '2xl' => 4,
                         ])
-                        ->reactive(),
+                        ->reactive()->required(),
 
                 ])
 
@@ -126,6 +130,15 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
 
     public function sendMessage()
     {
+
+        if (!$this->getSelectedValidation()) {
+            Notification::make()
+                ->warning()
+                ->title('Validasi Gagal')
+                ->body('Pastikan semua dropdown telah dipilih.')
+                ->send();
+            return;
+        }
         $customers = Customer::select('id', 'no_wa')->where('user_id', $this->selectedUser)->where('unit_kerja_id', $this->selectedUnitKerja)->get();
         $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
         $WhatsappServer = WhatsappServer::where('id', $this->selectedWhatsappServer)->first();
@@ -141,5 +154,10 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                 Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
                 break;
         }
+    }
+
+    public function getSelectedValidation()
+    {
+        return $this->selectedUser && $this->selectedUnitKerja && $this->selectedContentPlanner && $this->selectedWhatsappServer;
     }
 }
