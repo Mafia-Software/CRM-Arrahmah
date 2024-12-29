@@ -49,7 +49,7 @@ class WhatsAppServerResource extends Resource
             ->columns([
                 TextColumn::make('nama'),
                 TextColumn::make('no_wa')->label('No. Whatsapp'),
-                TextColumn::make('delay'),
+                TextColumn::make('delay')->suffix(' detik'),
                 TextColumn::make('service_status')->label('Status')->badge()->color(fn(string $state): string => match ($state) {
                     'SERVICE_OFF' => 'gray',
                     'PAIRING' => 'warning',
