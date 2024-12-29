@@ -21,7 +21,7 @@ class PesanKeluarResource extends Resource
     protected static ?int $navigationSort = 4;
     protected static ?string $slug = 'pesan-keluar';
     protected static ?string $navigationGroup = 'Pesan';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up';
 
     public static function form(Form $form): Form
     {
