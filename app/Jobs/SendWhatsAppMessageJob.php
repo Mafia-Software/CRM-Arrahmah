@@ -46,6 +46,6 @@ class SendWhatsAppMessageJob implements ShouldQueue
             $this->number,
             $this->message,
         );
-        PesanKeluar::create(['customer_id' => $this->customerId, 'history_id' => $this->historyId, 'status' => $res['code']]);
+        PesanKeluar::create(['id' => $res['results']['id_message'], 'customer_id' => $this->customerId, 'history_id' => $this->historyId, 'status' => $res['code']]);
     }
 }
