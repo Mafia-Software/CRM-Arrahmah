@@ -33,7 +33,7 @@ class CustomerResource extends Resource
                             ->label('Unit Kerja')
                             ->relationship('UnitKerja', 'name'),
                         Select::make('response')
-                            ->relationship('Response', 'name'),
+                            ->relationship('response', 'name'),
                         Select::make('user_id')->label('User')->relationship('user', 'name'),
                     ])
                     ->columns(1),
