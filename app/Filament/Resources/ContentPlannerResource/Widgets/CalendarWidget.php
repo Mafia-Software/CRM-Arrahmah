@@ -6,8 +6,8 @@ use App\Models\ContentPlanner;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
@@ -22,13 +22,31 @@ class CalendarWidget extends FullCalendarWidget
             ->where('tanggal', '>=', $fetchInfo['start'])
             ->get()
             ->map(
-                fn(ContentPlanner $event) => [
-                    'id' => $event->id,
-                    'title' => $event->pesan,
-                    'start' => $event->tanggal,
-                ]
+                function (ContentPlanner $event) {
+                    return [
+                        'id' => $event->id,
+                        'title' => $this->whatsappToHtml($event->pesan),
+                        'start' => $event->tanggal,
+                    ];
+                }
             )
             ->all();
+    }
+    function whatsappToHtml($text)
+    {
+        $text = preg_replace('/\*(.+?)\*/', '$1', $text);
+        $text = preg_replace('/_(.+?)_/', '$1', $text);
+        $text = preg_replace('/~(.*?)~/', '$1', $text);
+        return $text;
+    }
+    function htmlToWhatsapp($text)
+    {
+        $text = preg_replace('/<strong>(.+?)<\/strong>/', '*$1* ', $text);
+        $text = preg_replace('/<em>(.+?)<\/em>/', '_$1_ ', $text);
+        $text = preg_replace('/<del>(.+?)<\/del>/', '~$1~ ', $text);
+        $text = preg_replace('/<\/?p>/i', '', $text);
+
+        return $text;
     }
 
     protected function modalActions(): array
@@ -41,7 +59,18 @@ class CalendarWidget extends FullCalendarWidget
                             'tanggal' => $arguments['start'] ?? null,
                         ]);
                     }
-                )->createAnother(false),
+                )->createAnother(false)->mutateFormDataUsing(
+                    function (array $data): array {
+                        $data['pesan'] = $this->htmlToWhatsapp($data['pesan']);
+                        return $data;
+                    }
+                )->before(function ($data, $action) {
+                    $contentPlanner = ContentPlanner::where('tanggal', $data['tanggal'])->first();
+                    if ($contentPlanner) {
+                        Notification::make()->danger()->title('Error')->body('Tanggal Sudah Terisi')->send();
+                        $action->cancel();
+                    }
+                }),
             DeleteAction::make(),
         ];
     }
@@ -51,14 +80,13 @@ class CalendarWidget extends FullCalendarWidget
             RichEditor::make('pesan')->required()->toolbarButtons([
                 'bold',
                 'italic',
-                'underline',
                 'strike'
             ]),
-            TextInput::make('pesan')->required(),
             FileUpload::make('media')
                 ->directory('media')
                 ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'video/mp4'])
                 ->imageEditor()
+                ->visibility('public')
                 ->uploadingMessage('Mengupload Media...'),
             DatePicker::make('tanggal')->required()->readOnly(),
         ];
