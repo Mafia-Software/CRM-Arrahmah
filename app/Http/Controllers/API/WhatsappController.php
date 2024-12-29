@@ -33,10 +33,15 @@ class WhatsappController extends Controller
     public function getQR(string $apiKey)
     {
         $response = $this->whatsAppService->getQR($apiKey);
-
+        if ($response['code'] == 200) {
+            return response()->json([
+                'status' => $response['code'],
+                'qr' => $response['results']['qrString']
+            ]);
+        }
         return response()->json([
             'status' => $response['code'],
-            'qr' => $response['results']['qrString']
+            'message' => $response['results']['message']
         ]);
     }
 
