@@ -47,8 +47,8 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
             $this->api_key,
             $this->number,
             $this->message,
-            $this->media,
-            true
+            asset('storage/' . $this->media),
+            0
         );
         PesanKeluar::create(['customer_id' => $this->customerId, 'history_id' => $this->historyId, 'status' => $res['code']]);
     }
