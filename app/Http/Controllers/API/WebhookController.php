@@ -9,6 +9,7 @@ use App\Models\PesanKeluar;
 use App\Models\PesanMasuk;
 use App\Models\WhatsappServer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class WebhookController extends Controller
 {
@@ -22,22 +23,27 @@ class WebhookController extends Controller
             case 'change_state':
                 WhatsappServer::where('api_key', $request['results']['apiKey'])
                     ->update(['service_status' => $request['results']['state']]);
+                return response('Sukses', 200);
                 break;
             case 'message':
                 $this->fromMe($request['results']);
+                return response('Sukses', 200);
                 break;
             case 'message_ack':
                 $this->messageAck($request['results']['ack']);
+                return response('Sukses', 200);
                 break;
             case 'messsage_ack_browser':
                 $this->messageAck($request['results']['ack']);
+                return response('Sukses', 200);
                 break;
             default:
+                return response('Unhandled', 500);
                 break;
         }
     }
 
-    private function fromMe(Request $request)
+    private function fromMe(array $request)
     {
         switch ($request['key']['fromMe']) {
             case false:
@@ -50,20 +56,13 @@ class WebhookController extends Controller
                 ]);
                 break;
             case true:
-                $receiver = str_replace('@s.whatsapp.net', '', $request['key']['remotejid']);
-                $receiver = substr($receiver, 2);
-                $receiver = Customer::where('no_wa', '0' . $receiver)->first();
-                PesanKeluar::create([
-                    'id' => $request['key']['id'],
-                    'id_wapi' => $request['key']['id'],
-                    'customer_id' => $receiver->id ?? null,
-                    'status' => 1,
-                ]);
+                break;
+            default:
                 break;
         }
     }
 
-    private function messageAck(Request $request)
+    private function messageAck(array $request)
     {
         switch ($request['ack']['ack']) {
             case 2:
