@@ -3,12 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PesanMasukResource\Pages;
-use App\Filament\Resources\PesanMasukResource\RelationManagers;
 use App\Models\PesanMasuk;
-use Filament\Forms;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
+
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,8 +13,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class PesanMasukResource extends Resource
 {
@@ -26,10 +21,10 @@ class PesanMasukResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Pesan Masuk';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
     protected static ?string $modelLabel = ' Pesan Masuk';
     protected static ?string $pluralModelLabel = 'Pesan Masuk';
-    protected static ?string $slug = 'custom-url-slug';
+    protected static ?string $slug = 'pesan-masuk';
     protected static ?string $navigationGroup = 'Pesan';
 
     public static function form(Form $form): Form
@@ -62,7 +57,6 @@ class PesanMasukResource extends Resource
     {
         return [
             'index' => Pages\ListPesanMasuks::route('/'),
-            'edit' => Pages\EditPesanMasuk::route('/{record}/edit'),
         ];
     }
 }

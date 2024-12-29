@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ContentPlannerResource\Pages;
 
 use App\Filament\Resources\ContentPlannerResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateContentPlanner extends CreateRecord

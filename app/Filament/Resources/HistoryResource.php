@@ -3,29 +3,22 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\HistoryResource\Pages;
-use App\Filament\Resources\HistoryResource\RelationManagers;
 use App\Models\History;
-use Faker\Provider\ar_EG\Text;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class HistoryResource extends Resource
 {
     protected static ?string $model = History::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationGroup = 'Pesan';
     protected static ?string $navigationLabel = 'Riwayat Blast';

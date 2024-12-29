@@ -9,7 +9,7 @@ class CreateUnitKerja extends CreateRecord
 {
     protected static string $resource = UnitKerjaResource::class;
 
-     protected function getRedirectUrl(): string
+    protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index');
     }
