@@ -5,22 +5,40 @@ namespace App\Filament\Pages;
 use App\Models\User;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
+use Filament\Tables\Table;
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Actions\Concerns\InteractsWithRecord;
+use Filament\Actions\Concerns\InteractsWithActions;
 
-class RegisterUser extends Page
+class RegisterUser extends Page implements HasTable, HasForms, HasActions
 {
+    use InteractsWithTable;
+    use InteractsWithActions;
+    use InteractsWithForms;
+    use InteractsWithRecord;
+
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Master Data';
 
     protected static string $view = 'filament.pages.register-user';
 
+
+
     public $name;
     public $email;
     public $password;
+
 
     public function form(Form $form): Form
     {
@@ -33,14 +51,13 @@ class RegisterUser extends Page
                 TextInput::make('password')->required(),
 
             ])
-            ->columns(1);
+            ->columns(3);
     }
 
     public function sendAction()
     {
         return Action::make('send')
-            ->label('Register')
-            ->action(fn() => $this->RegisterUser());
+            ->label('Register');
     }
 
     public function RegisterUser()
@@ -80,5 +97,18 @@ class RegisterUser extends Page
 
             // Membuat user baru di database
         }
+    }
+    public function table(Table $table): Table
+    {
+
+        return $table
+            ->columns([
+                TextColumn::make('name'),
+                TextColumn::make('email'),
+            ])
+            ->query(function () {
+                return User::query();
+            })
+        ;
     }
 }
