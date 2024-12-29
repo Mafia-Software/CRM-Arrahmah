@@ -55,8 +55,8 @@ class WhatsAppServerResource extends Resource
                     'PAIRING' => 'warning',
                     'SERVICE_SCAN' => 'warning',
                     'SERVICE_ON' => 'success',
+                    'CONNECTED' => 'success',
                 }),
-                IconColumn::make('is_active')->boolean()->label('Terhubung?'),
             ])->poll('5s')
             ->actions([
                 ActionGroup::make([
