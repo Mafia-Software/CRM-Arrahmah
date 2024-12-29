@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('content_planners', function (Blueprint $table) {
             $table->id();
             $table->string("pesan");
-            $table->string("media");
+            $table->string("media")->nullable();
             $table->date("tanggal")->unique();
             $table->timestamps();
         });
