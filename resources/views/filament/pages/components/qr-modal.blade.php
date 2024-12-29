@@ -1,3 +1,7 @@
 <div class="flex justify-center">
-    <img src="data:image/png;base64, {{ $qr }}" alt="QR Code" />
+    @if (isset($qrCode))
+        <img src="data:image/png;base64, {{ $qr }}" alt="QR Code" />
+    @elseif (isset($message))
+        <p>{{ $message }}</p>
+    @endif
 </div>

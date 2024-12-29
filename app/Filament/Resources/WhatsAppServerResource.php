@@ -81,15 +81,20 @@ class WhatsAppServerResource extends Resource
                             if ($qr->getData()->status == 200) {
                                 $qrCode = substr($qr->getData()->qr, strpos($qr->getData()->qr, ',') + 1);
                                 session()->put('qr', $qrCode);
+                                $qrCode = session()->get('qr');
+                                session()->forget('qr');
+                                return view('filament.pages.components.qr-modal', ['qr' => $qrCode]);
                             } else {
                                 Notification::make()
                                     ->title('Gagal Mendapatkan QR')
+                                    ->body($qr->getData()->message)
                                     ->danger()
                                     ->send();
+                                session()->put('qr', $qr->getData()->message);
+                                $message = session()->get('qr');
+                                session()->forget('qr');
+                                return view('filament.pages.components.qr-modal', ['message' => $message]);
                             }
-                            $qrCode = session()->get('qr');
-                            session()->forget('qr');
-                            return view('filament.pages.components.qr-modal', ['qr' => $qrCode]);
                         })->modalAlignment('center')
                         ->modalWidth('sm')
                         ->modalSubmitAction(false)
