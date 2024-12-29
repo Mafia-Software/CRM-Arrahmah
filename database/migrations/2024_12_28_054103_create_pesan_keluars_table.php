@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pesan_keluars', function (Blueprint $table) {
             $table->id();
-            $table->string("customer_id");
-            $table->string("history_id");
+            $table->string("customer_id")->constrained('customers');
+            $table->string("history_id")->constrained('histories');
             $table->string("status");
             $table->timestamps();
         });
