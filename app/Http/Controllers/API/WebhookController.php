@@ -64,15 +64,15 @@ class WebhookController extends Controller
 
     private function messageAck(array $request)
     {
-        switch ($request['ack']['ack']) {
+        switch ($request['ack']) {
             case 2:
-                PesanKeluar::where('id', $request['ack']['id'])->update(['status' => 2]);
+                PesanKeluar::where('id', $request['id'])->update(['status' => 2]);
                 break;
             case 3:
-                PesanKeluar::where('id', $request['ack']['id'])->update(['status' => 3]);
+                PesanKeluar::where('id', $request['id'])->update(['status' => 3]);
                 break;
             case 4:
-                PesanKeluar::where('id', $request['ack']['id'])->update(['status' => 4]);
+                PesanKeluar::where('id', $request['id'])->update(['status' => 4]);
                 break;
         }
     }
