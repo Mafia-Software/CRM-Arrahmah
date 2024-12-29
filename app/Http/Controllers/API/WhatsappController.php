@@ -28,8 +28,7 @@ class WhatsappController extends Controller
             'user_id' => Auth::id()
         ]);
         foreach ($customers as $index => $customer) {
-            $jobs[] = (new SendWhatsAppMessageJob($history->id, $whatsappServer, $customer, $contentPlanner))
-                ->delay(now()->addSeconds($whatsappServer->delay * $index)); // Increase delay for each job
+            $jobs[] = new SendWhatsAppMessageJob($history->id, $whatsappServer, $customer, $contentPlanner); // Increase delay for each job
         }
         $batch = Bus::batch($jobs)->dispatch();
         $history->update(['batch_id' => $batch->id]);
@@ -44,8 +43,7 @@ class WhatsappController extends Controller
             'user_id' => Auth::id()
         ]);
         foreach ($customers as $index => $customer) {
-            $jobs[] = (new SendWhatsAppMessageMediaJob($history->id, $whatsappServer->api_key, $customer, $contentPlanner))
-                ->delay(now()->addSeconds($whatsappServer->delay * $index)); // Increase delay for each job
+            $jobs[] = new SendWhatsAppMessageMediaJob($history->id, $whatsappServer->api_key, $customer, $contentPlanner);
         }
         $batch = Bus::batch($jobs)->dispatch();
         $history->update(['batch_id' => $batch->id]);

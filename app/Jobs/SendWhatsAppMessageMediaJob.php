@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Sleep;
 
 class SendWhatsAppMessageMediaJob implements ShouldQueue
 {
@@ -21,6 +22,7 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
     protected $media;
     protected $customerId;
     protected $historyId;
+    protected $delayInSeconds;
     /**
      * Create a new job instance.
      */
@@ -32,6 +34,7 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
         $this->media = $contentPlanner->media;
         $this->customerId = $customer->id;
         $this->historyId = $historyId;
+        $this->delayInSeconds = $whatsappServer->delay;
     }
 
     /**
@@ -39,6 +42,7 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
      */
     public function handle(WhatsappService $WhatsAppService): void
     {
+        Sleep::for($this->delayInSeconds)->seconds();
         $res = $WhatsAppService->sendMediaFromUrl(
             $this->api_key,
             $this->number,
