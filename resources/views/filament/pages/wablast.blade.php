@@ -1,5 +1,4 @@
 <x-filament-panels::page>
-
     {{-- <div class="min-h-screen bg-gray-100 p-6">
             <div class="mx-auto max-w-4xl rounded-lg bg-white p-8 shadow-md">
                 <h1 class="mb-6 text-2xl font-bold text-gray-800">WhatsApp Blast</h1>

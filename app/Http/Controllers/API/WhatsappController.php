@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Services\WhatsappService;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendWhatsAppMessageJob;
+use App\Jobs\SendWhatsAppMessageMediaJob;
+use App\Models\History;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 
 class WhatsappController extends Controller
 {
@@ -16,19 +19,38 @@ class WhatsappController extends Controller
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function sendMessage(Request $request)
+    public function sendMessage($whatsappServer, $customers, $contentPlanner)
     {
-        $validated = $request->validate([
-            'number' => 'required',
-            'message' => 'required',
+        $jobs = [];
+        $history = History::create([
+            'content_planner_id' => $contentPlanner->id,
+            'whatsapp_server_id' => $whatsappServer->id,
+            'user_id' => Auth::id()
         ]);
-        $apiKey = $request->input('apiKey');
-        return $this->whatsAppService->sendMessage($apiKey, $validated['number'], $validated['message']);
-        // SendWhatsAppMessageJob::dispatch(
-        //     $validated['number'],
-        //     $validated['message'],
-        //     $validated['instance_id']
-        // );
+        foreach ($customers as $index => $customer) {
+            $jobs[] = (new SendWhatsAppMessageJob($history->id, $whatsappServer, $customer, $contentPlanner))
+                ->delay(now()->addSeconds($whatsappServer->delay * $index)); // Increase delay for each job
+        }
+        $batch = Bus::batch($jobs)->dispatch();
+        $history->update(['batch_id' => $batch->id]);
+        return response()->json(['status' => true, 'message' => 'Pesan Berhasil Diproses']);
+    }
+    public function sendMessageMedia($whatsappServer, $customers, $contentPlanner)
+    {
+        $jobs = [];
+        $history = History::create([
+            'content_planner_id' => $contentPlanner->id,
+            'whatsapp_server_id' => $whatsappServer->id,
+            'user_id' => Auth::id()
+        ]);
+        foreach ($customers as $index => $customer) {
+            $jobs[] = (new SendWhatsAppMessageMediaJob($history->id, $whatsappServer->api_key, $customer, $contentPlanner))
+                ->delay(now()->addSeconds($whatsappServer->delay * $index)); // Increase delay for each job
+        }
+        $batch = Bus::batch($jobs)->dispatch();
+        $history->update(['batch_id' => $batch->id]);
+
+        return response()->json(['status' => true, 'message' => 'Pesan Berhasil Diproses']);
     }
     public function getQR(string $apiKey)
     {

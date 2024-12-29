@@ -75,7 +75,7 @@ class WhatsappService
         return $response->json();
     }
 
-    public function sendMediaFromUrl($apiKey, $number, $url_file, $as_document)
+    public function sendMediaFromUrl($apiKey, $number, $message, $url_file, $as_document)
     {
         $url =  $this->wa_endpoint . 'sendMediaFromUrl';
 
@@ -86,6 +86,7 @@ class WhatsappService
             'phone' => $number,
             'url_file' => $url_file,
             'as_document' => $as_document,
+            'caption' => $message
         ]);
         Log::create([
             'type' => 'api_return',
