@@ -95,7 +95,7 @@ class WhatsAppServerResource extends Resource
                         ->modalSubmitAction(false)
                         ->modalCancelAction(false)
                         ->hidden(function ($record) {
-                            if ($record->service_status != 'SERVICE_SCAN' || $record->service_status != 'PAIRING')
+                            if ($record->service_status != 'SERVICE_SCAN' && $record->service_status != 'PAIRING')
                                 return true;
                         }),
                     Action::make('stop')
