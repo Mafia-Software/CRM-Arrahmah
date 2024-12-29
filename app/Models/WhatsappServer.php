@@ -11,12 +11,6 @@ class WhatsappServer extends Model
         'no_wa',
         'api_key',
         'service_status',
-        'is_active',
         'delay',
     ];
-
-    public function getDelayAttribute($value)
-    {
-        return $value . ' detik';
-    }
 }
