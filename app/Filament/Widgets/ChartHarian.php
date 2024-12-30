@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Widgets;
 
 use App\Models\PesanKeluar;
@@ -7,9 +8,9 @@ use Illuminate\Support\Carbon;
 
 class ChartHarian extends ChartWidget
 {
-    protected static ?string $heading = 'Statistik Pesan Keluar Harian';
+    protected static ?string $heading = 'Statistik Pesan Harian';
     protected static ?int $sort = 20;
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = ['sm' => 12, 'xl' => 6];
 
     protected function getType(): string
     {
@@ -19,7 +20,6 @@ class ChartHarian extends ChartWidget
     protected function getData(): array
     {
         $dailyData = [];
-
 
         for ($day = 1; $day <= 31; $day++) {
             $startDate = Carbon::now()->startOfYear()->addDays($day - 1);
@@ -33,9 +33,9 @@ class ChartHarian extends ChartWidget
             'labels' => range(1, 31),
             'datasets' => [
                 [
-                    'label' => 'Statistik Harian',
+                    'label' => 'Pesan Keluar',
                     'data' => $dailyData,
-                    'borderColor' => 'blue',
+                    'borderColor' => 'red',
                 ],
             ],
         ];

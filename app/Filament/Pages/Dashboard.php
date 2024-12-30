@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\ChartHarian;
@@ -10,6 +11,10 @@ class Dashboard extends \Filament\Pages\Dashboard
     protected static ?string $navigationIcon = 'bi-columns-gap';
     protected static ?int $navigationSort = 0;
 
+    public function getColumns(): int | string | array
+    {
+        return 12;
+    }
     // Menambahkan widget ke dashboard
     public function getWidgets(): array
     {

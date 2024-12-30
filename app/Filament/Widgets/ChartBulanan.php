@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Widgets;
 
 use App\Models\PesanKeluar;
@@ -7,9 +8,9 @@ use Illuminate\Support\Carbon;
 
 class ChartBulanan extends ChartWidget
 {
-    protected static ?string $heading = 'Statistik Pesan Keluar Bulanan';
+    protected static ?string $heading = 'Statistik Pesan Bulanan';
     protected static ?int $sort = 20;
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = ['sm' => 12, 'xl' => 6];
 
     protected function getType(): string
     {
@@ -33,7 +34,7 @@ class ChartBulanan extends ChartWidget
             'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // Label untuk bulan
             'datasets' => [
                 [
-                    'label' => 'Statistik Bulanan',
+                    'label' => 'Pesan Keluar',
                     'data' => $monthlyData,
                     'borderColor' => 'red',
                 ],
