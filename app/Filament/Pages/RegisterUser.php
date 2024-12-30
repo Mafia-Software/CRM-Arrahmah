@@ -58,7 +58,9 @@ class RegisterUser extends Page implements HasTable, HasForms, HasActions
     public function sendAction()
     {
         return Action::make('send')
-            ->label('Register');
+            ->label('Register')
+            ->action(fn() => $this->RegisterUser());;
+
     }
 
     public function RegisterUser()
