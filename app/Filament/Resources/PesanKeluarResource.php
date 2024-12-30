@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PesanKeluarResource\Pages;
 use App\Models\PesanKeluar;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -25,34 +26,35 @@ class PesanKeluarResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('customer_id')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('history_id')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('status')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+        return $form;
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('customer_id')
-                    ->searchable()->label('Customer ID'),
+                TextColumn::make('customer.nama')
+                    ->searchable()->label('Customer'),
                 TextColumn::make('history_id')
-                    ->searchable()->label('History ID'),
+                    ->searchable()->label('History'),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->label('Status')->badge()->color(fn(string $state): string => match ($state) {
+                        'Terkirim' => 'warning',
+                        'Terkirim & Masuk' => 'warning',
+                        'Terbaca' => 'success',
+                        'Error' => 'danger',
+                    })->getStateUsing(fn($record) => match ($record->status) {
+                        '200' => 'Terkirim',
+                        '2' => 'Terkirim',
+                        '3' => 'Terkirim & Masuk',
+                        '4' => 'Terbaca',
+                        default => 'Error',
+                    }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-            ])
+                    ->label('Tanggal'),
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

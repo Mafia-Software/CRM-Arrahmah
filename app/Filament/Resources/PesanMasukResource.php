@@ -42,7 +42,7 @@ class PesanMasukResource extends Resource
                 TextColumn::make('pesan')->label('Pesan'),
                 ImageColumn::make('media')->label('Media'),
                 TextColumn::make('created_at')->label('Dibuat')->dateTime(),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([])
             ->actions([
                 EditAction::make(),

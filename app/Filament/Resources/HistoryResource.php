@@ -37,7 +37,7 @@ class HistoryResource extends Resource
                 TextColumn::make('whatsappServer.nama')->label('WA Server'),
                 TextColumn::make('contentPlanner.pesan')->label('Pesan'),
                 TextColumn::make('created_at')->label('Tanggal'),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

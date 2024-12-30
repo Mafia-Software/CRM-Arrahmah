@@ -35,7 +35,7 @@ class WebhookResource extends Resource
                     ->dateTime()
                     ->sortable(),
 
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

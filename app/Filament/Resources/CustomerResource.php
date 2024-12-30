@@ -52,7 +52,7 @@ class CustomerResource extends Resource
                 TextColumn::make('unitKerja.name')->sortable()->searchable()->label('Unit Kerja'),
                 TextColumn::make('response.name')->sortable()->searchable()->label('Response'),
                 TextColumn::make('user.name')->sortable()->searchable()->label('User'),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
                 SelectFilter::make('unit_kerja')
