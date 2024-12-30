@@ -26,8 +26,8 @@ class CustomerResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('nama')->required(),
-                        TextInput::make('alamat')->required(),
+                        TextInput::make('nama'),
+                        TextInput::make('alamat'),
                         TextInput::make('no_wa')->required()->label('No. Whatsapp'),
                         Select::make('unit_kerja_id')
                             ->label('Unit Kerja')
