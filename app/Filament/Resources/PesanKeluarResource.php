@@ -18,7 +18,7 @@ class PesanKeluarResource extends Resource
     protected static ?string $model = PesanKeluar::class;
     protected static ?string $modelLabel = ' Pesan Keluar';
     protected static ?string $pluralModelLabel = 'Pesan Keluar';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
     protected static ?string $slug = 'pesan-keluar';
     protected static ?string $navigationGroup = 'Pesan';
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up';
