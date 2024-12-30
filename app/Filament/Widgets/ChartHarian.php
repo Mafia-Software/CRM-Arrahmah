@@ -19,25 +19,26 @@ class ChartHarian extends ChartWidget
 
     protected function getData(): array
     {
-        $dailyData = [];
+        $data = [];
+        $today = Carbon::today();
+        $startOfMonth = $today->copy()->startOfMonth();
 
-        for ($day = 1; $day <= 31; $day++) {
-            $startDate = Carbon::now()->startOfYear()->addDays($day - 1);
-            $endDate = $startDate->copy();
-
-            $count = PesanKeluar::whereBetween('created_at', [$startDate, $endDate])->count();
-            $dailyData[] = $count;
+        for ($day = 1; $day <= $today->daysInMonth; $day++) {
+            $date = $startOfMonth->copy()->addDays($day - 1);
+            $count = PesanKeluar::whereDate('created_at', $date)->count();
+            $data[] = $count;
         }
 
         return [
-            'labels' => range(1, 31),
             'datasets' => [
                 [
                     'label' => 'Pesan Keluar',
-                    'data' => $dailyData,
+                    'data' => $data,
                     'borderColor' => 'red',
+
                 ],
             ],
+            'labels' => range(1, $today->daysInMonth),
         ];
     }
 }
