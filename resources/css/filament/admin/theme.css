@@ -26,7 +26,7 @@
 }
 
 .fi-sidebar-nav {
-    background-color: #4f0786 !important;
+    background-color: #ffa200 !important;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -37,7 +37,7 @@
 }
 
 .fi-sidebar-header {
-    background-color: #410271;
+    background-color: #f5a61f;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,13 +54,13 @@
     font-size: 1rem;
     height: 40px;
     width: 50px;
-    color: #fff;
+    color: #483d8b;
     justify-self: center;
 }
 
 .fi-sidebar-item-label {
     font-size: 16px;
-    color: #fff;
+    color: #202020;
 
 
 }
@@ -78,11 +78,11 @@
 .fi-sidebar-item-active {
 
     .fi-sidebar-item-icon {
-        color: #ffd034;
+        color: #800000;
 
     }
     .fi-sidebar-item-label {
-        color: #ffd034;
+        color: #800000;
     }
 }
 
