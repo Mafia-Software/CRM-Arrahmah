@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
 use App\Models\Log;
 use App\Models\PesanKeluar;
 use App\Models\PesanMasuk;
 use App\Models\WhatsappServer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class WebhookController extends Controller
 {
@@ -42,15 +41,29 @@ class WebhookController extends Controller
                 break;
         }
     }
+    private function formatWhatsappNumber($whatsappNumber)
+    {
+        // Remove "@s.whatsapp.net" if it exists
+        $cleanedNumber = Str::before($whatsappNumber, '@');
 
+        // Check if the number starts with "62"
+        if (Str::startsWith($cleanedNumber, '62')) {
+            $formattedNumber = '0' . Str::substr($cleanedNumber, 2);
+        } else {
+            $formattedNumber = $cleanedNumber;
+        }
+
+        return $formattedNumber;
+    }
     private function fromMe(array $request)
     {
         switch ($request['key']['fromMe']) {
             case false:
-                $sender = WhatsappServer::where('api_key', $request['key']['apiKey'])->first();
+                $sender = WhatsappServer::where('api_key', $request['apiKey'])->first();
+                $formattedNumber = $this->formatWhatsappNumber($request['from']);
                 PesanMasuk::create([
                     'id' => $request['key']['id'],
-                    'no_wa' => $request['key']['from'],
+                    'no_wa' => $formattedNumber,
                     'pesan' => $request['body'],
                     'wa_server_id' => $sender->id
                 ]);
