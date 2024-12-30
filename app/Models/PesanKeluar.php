@@ -14,4 +14,14 @@ class PesanKeluar extends Model
         "history_id",
         "status"
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function history()
+    {
+        return $this->belongsTo(History::class);
+    }
 }

@@ -15,4 +15,9 @@ class PesanMasuk extends Model
         'no_wa',
         'pesan',
     ];
+
+    public function whatsappServer()
+    {
+        return $this->belongsTo(WhatsAppServer::class);
+    }
 }
