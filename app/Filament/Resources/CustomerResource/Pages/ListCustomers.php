@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\CustomerResource\Pages;
 
-use App\Filament\Resources\CustomerResource;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ImportAction;
+use App\Filament\Imports\DataImporter;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\CustomerResource;
 
 class ListCustomers extends ListRecords
 {
@@ -14,7 +16,7 @@ class ListCustomers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('import')->label('Import Donatur DB'),
+            ImportAction::make('import')->label('Import Donatur DB')->importer(DataImporter::class),
             CreateAction::make()->label('Tambah Customer'),
         ];
     }
