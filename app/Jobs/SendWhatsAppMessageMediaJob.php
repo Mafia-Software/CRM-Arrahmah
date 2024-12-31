@@ -42,7 +42,6 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
      */
     public function handle(WhatsappService $WhatsAppService): void
     {
-        Sleep::for($this->delayInSeconds)->seconds();
         $res = $WhatsAppService->sendMediaFromUrl(
             $this->api_key,
             $this->number,
