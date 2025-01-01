@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('unit_kerja_id')->nullable()->constrained('unit_kerjas');
             $table->integer('response_id')->nullable()->constrained('responses');
             $table->integer('user_id')->nullable()->constrained('users');
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
