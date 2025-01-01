@@ -32,7 +32,7 @@ class WebhookController extends Controller
                 $this->messageAck($request['results']['ack']);
                 return response('Sukses', 200);
                 break;
-            case 'messsage_ack_browser':
+            case 'message_ack_browser':
                 $this->messageAck($request['results']['ack']);
                 return response('Sukses', 200);
                 break;
