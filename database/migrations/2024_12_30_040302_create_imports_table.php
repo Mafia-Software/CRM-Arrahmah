@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedInteger('successful_rows')->default(0);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
+            $table->datetime('deleted_at')->nullable();
         });
     }
 

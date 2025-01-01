@@ -10,6 +10,8 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ForceDeleteAction;
 use App\Filament\Resources\UnitKerjaResource\Pages;
 
 class UnitKerjaResource extends Resource
@@ -43,7 +45,13 @@ class UnitKerjaResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
+
+            ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 

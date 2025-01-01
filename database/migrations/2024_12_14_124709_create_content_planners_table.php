@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("media")->nullable();
             $table->date("tanggal")->unique();
             $table->timestamps();
+            $table->datetime('deleted_at')->nullable();
         });
     }
 

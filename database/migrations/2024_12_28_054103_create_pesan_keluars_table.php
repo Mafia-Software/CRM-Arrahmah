@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("customer_id")->constrained('customers');
             $table->string("history_id")->constrained('histories');
             $table->string("status");
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

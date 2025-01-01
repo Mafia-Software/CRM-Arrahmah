@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('wa_server_id')->constrained('whatsapp_servers');
             $table->text('no_wa');
             $table->text('pesan');
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

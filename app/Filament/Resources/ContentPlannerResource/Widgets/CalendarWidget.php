@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources\ContentPlannerResource\Widgets;
 
+use Filament\Forms\Form;
 use App\Models\ContentPlanner;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Model;
-use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ForceDeleteAction;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 use Saade\FilamentFullCalendar\Actions\DeleteAction;
+use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
@@ -72,6 +74,8 @@ class CalendarWidget extends FullCalendarWidget
                     }
                 }),
             DeleteAction::make(),
+            RestoreAction::make(),
+            ForceDeleteAction::make(),
         ];
     }
     public function getFormSchema(): array

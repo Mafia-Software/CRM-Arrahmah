@@ -18,6 +18,7 @@ return new class() extends Migration {
             $table->integer('delay');
             $table->string('service_status');
             $table->timestamps();
+            $table->datetime('deleted_at')->nullable();
         });
     }
 

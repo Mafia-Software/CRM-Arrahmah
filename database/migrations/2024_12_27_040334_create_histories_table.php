@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("whatsapp_server_id")->constrained('whatsapp_servers');
             $table->string('content_planner_id')->nullable()->constrained('content_planners');
             $table->string('batch_id')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
