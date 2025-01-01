@@ -8,7 +8,6 @@ use Filament\Pages\Page;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\Hash;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -27,30 +26,22 @@ class RegisterUser extends Page implements HasTable, HasForms, HasActions
     use InteractsWithForms;
     use InteractsWithRecord;
 
-
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 2;
-
     protected static string $view = 'filament.pages.register-user';
-
-
 
     public $name;
     public $email;
     public $password;
 
-
     public function form(Form $form): Form
     {
         return $form
-
             ->schema([
-                TextInput::make('name'),
-                TextInput::make('email'),
-
-                TextInput::make('password')->required(),
-
+                TextInput::make('name')->required()->label('Nama'),
+                TextInput::make('email')->required()->email()->label('Email'),
+                TextInput::make('password')->password()->required(),
             ])
             ->columns(3);
     }
@@ -60,31 +51,23 @@ class RegisterUser extends Page implements HasTable, HasForms, HasActions
         return Action::make('send')
             ->label('Register')
             ->action(fn() => $this->RegisterUser());;
-
     }
 
     public function RegisterUser()
-
     {
         $data = $this->form->getState();
-
-
         $validatedData = validator($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string'], // Pastikan password valid
         ])->validate(); // Jika validasi gagal, Laravel akan otomatis mengeluarkan pesan error
-
         try {
-
             $userData = [
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),  // Pastikan password di-hash
             ];
-
-            $user = User::create($userData);
-
+            User::create($userData);
             Notification::make()
                 ->title('Registrasi Berhasil')
                 ->body('User telah berhasil terdaftar.')
@@ -96,9 +79,6 @@ class RegisterUser extends Page implements HasTable, HasForms, HasActions
                 ->body('User Gagal terdaftar, Coba Lagi')
                 ->danger() // Menampilkan notifikasi sukses
                 ->send();
-            // Menyaring data yang dibutuhkan untuk pembuatan user
-
-            // Membuat user baru di database
         }
     }
     public function table(Table $table): Table
@@ -106,12 +86,11 @@ class RegisterUser extends Page implements HasTable, HasForms, HasActions
 
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->label('Nama'),
                 TextColumn::make('email'),
             ])
             ->query(function () {
                 return User::query();
-            })
-        ;
+            });
     }
 }

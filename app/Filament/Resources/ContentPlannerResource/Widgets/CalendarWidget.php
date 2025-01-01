@@ -41,12 +41,12 @@ class CalendarWidget extends FullCalendarWidget
     }
     function htmlToWhatsapp($text)
     {
-        $text = preg_replace('/<strong>(.+?)<\/strong>/', '*$1* ', $text);
-        $text = preg_replace('/<em>(.+?)<\/em>/', '_$1_ ', $text);
-        $text = preg_replace('/<del>(.+?)<\/del>/', '~$1~ ', $text);
-        $text = preg_replace('/<\/?p>/i', '', $text);
-
-        return $text;
+        $markdown = str_replace(['<strong>', '</strong>'], ['*', '*'], $text);
+        $markdown = str_replace(['<em>', '</em>'], ['_', '_'], $markdown);
+        $markdown = str_replace(['<del>', '</del>'], ['~', '~'], $markdown);
+        $markdown = str_replace(['<p>', '</p>'], ["", "\n"], $markdown);
+        $markdown = rtrim($markdown, "\n");
+        return $markdown;
     }
 
     protected function modalActions(): array

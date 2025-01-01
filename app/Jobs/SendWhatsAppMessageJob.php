@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Sleep;
 
 class SendWhatsAppMessageJob implements ShouldQueue
 {
@@ -40,7 +39,6 @@ class SendWhatsAppMessageJob implements ShouldQueue
      */
     public function handle(WhatsappService $WhatsAppService)
     {
-        Sleep::for($this->delayInSeconds)->seconds();
         $res = $WhatsAppService->sendMessage(
             $this->api_key,
             $this->number,
