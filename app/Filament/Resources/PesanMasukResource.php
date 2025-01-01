@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -18,7 +17,6 @@ use Filament\Tables\Table;
 class PesanMasukResource extends Resource
 {
     protected static ?string $model = PesanMasuk::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-down';
     protected static ?string $navigationLabel = 'Pesan Masuk';
     protected static ?int $navigationSort = 3;
@@ -45,7 +43,6 @@ class PesanMasukResource extends Resource
             ])->defaultSort('created_at', 'desc')
             ->filters([])
             ->actions([
-                EditAction::make(),
                 DeleteAction::make(),
             ])
             ->bulkActions([
