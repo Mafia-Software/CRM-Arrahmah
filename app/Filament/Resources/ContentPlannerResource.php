@@ -17,10 +17,10 @@ class ContentPlannerResource extends Resource
     {
         return $form;
     }
-    public static function table(Table $table): Table
-    {
-        return $table;
-    }
+    // public static function table(Table $table): Table
+    // {
+    //     return $table;
+    // }
 
     public static function getWidgets(): array
     {
