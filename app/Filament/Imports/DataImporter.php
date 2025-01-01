@@ -3,6 +3,7 @@
 namespace App\Filament\Imports;
 
 use App\Models\Data;
+use App\Models\Customer;
 use App\Models\UnitKerja;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\ImportColumn;
@@ -49,7 +50,11 @@ class DataImporter extends Importer
 
                         if ($unitKerja) {
                             // Jika unit kerja ditemukan, kembalikan objek unit kerja
-                            return $unitKerja;
+                            return new Customer([
+                                'nama' => $state['nama'],
+                                'no_wa' => $state['no_wa'],
+                                'unit_kerja_id' => $unitKerja->id,
+                            ]);
                         }
 
                         // Jika unit kerja tidak ditemukan, kembalikan pesan "unit kerja tidak ditemukan"
@@ -59,15 +64,44 @@ class DataImporter extends Importer
         ];
     }
 
-    // public function resolveRecord(): ?Data
-    // {
-    //     // return Data::firstOrNew([
-    //     //     // Update existing records, matching them by `$this->data['column_name']`
-    //     //     'email' => $this->data['email'],
-    //     // ]);
+    public function resolveRecord(): ?Customer
+    {
+        return Customer::firstOrCreate(
+            [
+                "no_wa" => $this->data['No Wa'],
+            ]
+        );
 
-    //     return new Data();
-    // }
+        return new Customer();
+    }
+
+    public function importCsvData(string $filePath)
+    {
+        // Membaca file CSV
+        $rows = array_map('str_getcsv', file($filePath));
+        $header = array_shift($rows); // Ambil header dari CSV
+
+        // Validasi header untuk memastikan format CSV benar
+        if (!in_array('Nama', $header) || !in_array('No Wa', $header) || !in_array('Unit Kerja', $header)) {
+            throw new \Exception('Header CSV tidak valid. Pastikan ada kolom Nama, No Wa, dan Unit Kerja.');
+        }
+
+        // Iterasi setiap baris data dan masukkan ke tabel Customer
+        foreach ($rows as $row) {
+            $data = array_combine($header, $row);
+
+            // Cari unit kerja berdasarkan nama
+            $unitKerja = UnitKerja::where('name', $data['Unit Kerja'])->first();
+
+            // Masukkan data customer
+            Customer::create([
+                'nama' => $data['Nama'],
+                'no_wa' => $data['No Wa'],
+                'unit_kerja_id' => $unitKerja ? $unitKerja->id : null, // Simpan ID unit kerja jika ditemukan
+            ]);
+        }
+    }
+
 
     public static function getCompletedNotificationBody(Import $import): string
     {
