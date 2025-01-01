@@ -12,6 +12,7 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use App\Filament\Resources\CustomerResource\Pages;
 
 class CustomerResource extends Resource
@@ -55,6 +56,7 @@ class CustomerResource extends Resource
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
+                TrashedFilter::make(),
                 SelectFilter::make('unit_kerja')
                     ->label("Unit kerja")
                     ->relationship('unitKerja', 'name'),
@@ -67,10 +69,13 @@ class CustomerResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])->emptyStateHeading('Belum Ada Data Customer');
     }
