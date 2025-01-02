@@ -28,9 +28,6 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Notifications\Notification;
 use PhpParser\Node\Stmt\Break_;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Columns\CheckboxColumn;
-
 
 class WABlast extends Page implements HasTable, HasForms, HasActions
 {
@@ -52,7 +49,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     public $startId;
     public $endId;
 
-
     public function form(Form $form): Form
     {
         return $form
@@ -62,16 +58,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                     'xl' => 6,
                     '2xl' => 8,
                 ])->schema([
-                    Select::make('selectedUser')
-                        ->label('User')
-                        ->options(User::all()->pluck('name', 'id'))
-                        ->default(null)
-                        ->columnSpan([
-                            'sm' => 2,
-                            'xl' => 3,
-                            '2xl' => 4,
-                        ])
-                        ->reactive()->required(),
+
                     Select::make('selectedUnitKerja')
                         ->label('Unit Kerja')
                         ->options(UnitKerja::all()->pluck('name', 'id'))
@@ -97,9 +84,9 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                         ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
                         ->default(null)
                         ->columnSpan([
-                            'sm' => 2,
-                            'xl' => 3,
-                            '2xl' => 4,
+                            'sm' => 12,
+                            'xl' => 6,
+                            '2xl' => 8,
                         ])
                         ->reactive()->required(),
                     TextInput::make('startId')
@@ -125,31 +112,21 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
 
             ]);
     }
-
     public $selectedIds = [];
     public function table(Table $table): Table
     {
         return $table
-        ->columns([
-            TextColumn::make('id')->label('ID'),
-            TextColumn::make('nama'),
-            TextColumn::make('alamat'),
-            TextColumn::make('no_wa')->label('No. Whatsapp'),
-            CheckboxColumn::make('selected')
-            ->label('Pilih')
-            ->toggleable() // Agar bisa diaktifkan/nonaktifkan
-            ->default(false) // Secara default tidak tercentang
-            ->getStateUsing(fn ($record) => $record->selected === 1 || $record->selected === null)
-            ->afterStateUpdated(function ($state, $record) {
-                // Logika untuk mengelola array $selectedIds ketika checkbox diubah
-                // (Jika diperlukan)
-            }),
+            ->columns([
+                TextColumn::make('id')->label('ID'),
+                TextColumn::make('nama'),
+                TextColumn::make('alamat'),
+                TextColumn::make('unitKerja.name')->label('Unit Kerja'),
+                TextColumn::make('no_wa')->label('No. Whatsapp'),
             ])
-
             ->emptyStateHeading('Silahkan Pilih Unit Kerja dan User')
             ->query(function () {
                 return Customer::when(
-                    is_null($this->selectedUser),
+                    is_null($this->selectedUnitKerja),
                     fn ($query) => $query,
                     fn ($query) => $query
                         ->when(
@@ -162,7 +139,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             fn ($query) => $query->where('unit_kerja_id', $this->selectedUnitKerja),
                             fn ($query) => $query
                         )
-                );
+                        );
             })
             ->actions([
                 // DeleteAction::make()
@@ -190,20 +167,15 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     }
 
     $customers = Customer::select('id', 'no_wa')
-        ->where('user_id', $this->selectedUser)
-        ->when(
-            $this->selectedUnitKerja,
-            fn ($query) => $query->where('unit_kerja_id', $this->selectedUnitKerja),
-            fn ($query) => $query
-        )
-        ->whereIn('selected', [1, null]);
+
+        ->where('unit_kerja_id', $this->selectedUnitKerja);
 
     if ($this->startId && $this->endId) {
         $customers = $customers->whereBetween('id', [$this->startId, $this->endId]);
     }
 
     $customers = $customers->get();
-
+    dd($customers);
     $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
     $WhatsappServer = WhatsappServer::where('id', $this->selectedWhatsappServer)->first();
 
@@ -223,6 +195,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
 
     public function getSelectedValidation()
     {
-        return $this->selectedUser && $this->selectedContentPlanner && $this->selectedWhatsappServer;
+        return  $this->selectedContentPlanner && $this->selectedWhatsappServer;
     }
 }
