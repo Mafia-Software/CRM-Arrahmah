@@ -175,7 +175,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     }
 
     $customers = $customers->get();
-    dd($customers);
+
     $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
     $WhatsappServer = WhatsappServer::where('id', $this->selectedWhatsappServer)->first();
 
