@@ -31,7 +31,6 @@ class CustomerResource extends Resource
                     TextInput::make('no_wa')
                         ->required()
                         ->label('No. Whatsapp')
-                        // ->unique(table: Customer::class, column: 'no_wa', ignoreRecord: true)
                         ->rule(function ($get) {
                             return function ($attribute, $value, $fail) use ($get) {
                                 $unitKerjaId = $get('unit_kerja_id');
@@ -42,7 +41,7 @@ class CustomerResource extends Resource
                                 }
                             };
                         }),
-                    Select::make('unit_kerja_id')->label('Unit Kerja')->relationship('UnitKerja', 'name'),
+                    Select::make('unit_kerja_id')->label('Unit Kerja')->relationship('UnitKerja', 'name')->required(),
                     Select::make('response')->relationship('response', 'name'),
                     Select::make('user_id')->label('User')->relationship('user', 'name'),
                 ])
