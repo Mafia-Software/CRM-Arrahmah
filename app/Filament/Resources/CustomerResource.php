@@ -23,22 +23,30 @@ class CustomerResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Section::make()
-                    ->schema([
-                        TextInput::make('nama'),
-                        TextInput::make('alamat'),
-                        TextInput::make('no_wa')->required()->label('No. Whatsapp'),
-                        Select::make('unit_kerja_id')
-                            ->label('Unit Kerja')
-                            ->relationship('UnitKerja', 'name'),
-                        Select::make('response')
-                            ->relationship('response', 'name'),
-                        Select::make('user_id')->label('User')->relationship('user', 'name'),
-                    ])
-                    ->columns(1),
-            ]);
+        return $form->schema([
+            Section::make()
+                ->schema([
+                    TextInput::make('nama'),
+                    TextInput::make('alamat'),
+                    TextInput::make('no_wa')
+                        ->required()
+                        ->label('No. Whatsapp')
+                        ->rule(function ($get) {
+                            return function ($attribute, $value, $fail) use ($get) {
+                                $unitKerjaId = $get('unit_kerja_id');
+                                $existing = Customer::where('no_wa', $value)->where('unit_kerja_id', $unitKerjaId)->exists();
+
+                                if ($existing) {
+                                    $fail('Nomor WhatsApp ini sudah digunakan di unit kerja yang sama.');
+                                }
+                            };
+                        }),
+                    Select::make('unit_kerja_id')->label('Unit Kerja')->relationship('UnitKerja', 'name')->required(),
+                    Select::make('response')->relationship('response', 'name'),
+                    Select::make('user_id')->label('User')->relationship('user', 'name'),
+                ])
+                ->columns(1),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -53,31 +61,18 @@ class CustomerResource extends Resource
                 TextColumn::make('unitKerja.name')->sortable()->searchable()->label('Unit Kerja'),
                 TextColumn::make('response.name')->sortable()->searchable()->label('Response'),
                 TextColumn::make('user.name')->sortable()->searchable()->label('User'),
-            ])->defaultSort('created_at', 'desc')
+            ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
                 TrashedFilter::make(),
-                SelectFilter::make('unit_kerja')
-                    ->label("Unit kerja")
-                    ->relationship('unitKerja', 'name'),
+                SelectFilter::make('unit_kerja')->label('Unit kerja')->relationship('unitKerja', 'name'),
 
-                SelectFilter::make('response')
-                    ->label("Response")
-                    ->relationship('response', 'name'),
+                SelectFilter::make('response')->label('Response')->relationship('response', 'name'),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ])->emptyStateHeading('Belum Ada Data Customer');
+            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make(), Tables\Actions\RestoreAction::make(), Tables\Actions\ForceDeleteAction::make()])
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make(), Tables\Actions\ForceDeleteBulkAction::make(), Tables\Actions\RestoreBulkAction::make()])])
+            ->emptyStateHeading('Belum Ada Data Customer');
     }
 
     public static function getRelations(): array
