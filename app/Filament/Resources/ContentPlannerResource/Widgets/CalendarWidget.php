@@ -47,6 +47,9 @@ class CalendarWidget extends FullCalendarWidget
         $markdown = str_replace(['<em>', '</em>'], ['_', '_'], $markdown);
         $markdown = str_replace(['<del>', '</del>'], ['~', '~'], $markdown);
         $markdown = str_replace(['<p>', '</p>'], ["", "\n"], $markdown);
+        $markdown = str_replace(['<br>'], ["\n"], $markdown);
+        $markdown = str_replace(['&nbsp;'], [""], $markdown);
+
         $markdown = rtrim($markdown, "\n");
         return $markdown;
     }
