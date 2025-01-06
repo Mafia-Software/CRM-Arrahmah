@@ -76,6 +76,7 @@ class CalendarWidget extends FullCalendarWidget
                         $action->cancel();
                     }
                 }),
+            DeleteAction::make(),
         ];
     }
     public function getFormSchema(): array
