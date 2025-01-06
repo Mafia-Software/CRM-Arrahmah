@@ -17,6 +17,8 @@ use App\Filament\Resources\HistoryResource\Pages;
 use App\Tables\Columns\Progress;
 use RyanChandler\FilamentProgressColumn\ProgressColumn;
 use Symfony\Component\Console\Helper\ProgressIndicator;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
 
 class HistoryResource extends Resource
 {
@@ -42,8 +44,9 @@ class HistoryResource extends Resource
                 TextColumn::make('whatsappServer.nama')->label('WA Server'),
                 TextColumn::make('contentPlanner.pesan')->label('Pesan'),
                 TextColumn::make('created_at')->label('Tanggal'),
-                // ProgressColumn::make('progress')->label('Progress')->color('bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500')->progress(function ($record) {
-                // return ($record->rows_complete / $record->total_rows) * 100;}),
+                ProgressColumn::make('progress')->label('Progress')->color('bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500')->progress(function ($record) {
+                    return Bus::findBatch($record->batch_id)->progress();
+                }),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
