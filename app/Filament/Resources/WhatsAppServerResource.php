@@ -38,7 +38,9 @@ class WhatsAppServerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric(),
-                TextInput::make('delay')->label('delay'),
+                TextInput::make('delay')->label('Delay')->suffix('Detik'),
+                TextInput::make('delaybatch')->label('Delay/Batch') ->suffix('Menit'),
+                TextInput::make('jumlahbatch')->label('Jumlah Batch'),
             ]);
     }
 
@@ -49,6 +51,8 @@ class WhatsAppServerResource extends Resource
                 TextColumn::make('nama'),
                 TextColumn::make('no_wa')->label('No. Whatsapp'),
                 TextColumn::make('delay')->suffix(' detik'),
+                TextColumn::make('delaybatch')->label('Delay/Batch')->suffix(' menit'),
+                TextColumn::make('jumlahbatch')->label('Jumlah Batch'),
                 TextColumn::make('service_status')->label('Status')->badge()->color(fn(string $state): string => match ($state) {
                     'SERVICE_OFF' => 'gray',
                     'PAIRING' => 'warning',
