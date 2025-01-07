@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\History;
+use Filament\Forms\Form;
 use App\Services\WhatsappService;
+use Illuminate\Support\Facades\Bus;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendWhatsAppMessageJob;
-use App\Jobs\SendWhatsAppMessageMediaJob;
-use App\Models\History;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Bus;
+use App\Jobs\SendWhatsAppMessageMediaJob;
 
 class WhatsappController extends Controller
 {
@@ -19,29 +20,31 @@ class WhatsappController extends Controller
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function sendMessage($whatsappServer, $customers, $contentPlanner, $jumlahBatch, $delay, $delayBatch)
+    public function sendMessage( $whatsappServer, $customers, $contentPlanner, $jumlahBatch, $delay, $delayBatch, Form $form)
     {
         $jobs = [];
         $history = History::create([
             'content_planner_id' => $contentPlanner->id,
             'whatsapp_server_id' => $whatsappServer->id,
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]);
+
+        $jumlahBatch = $form->getState()['jumlahbatch']; 
+        $delay = $form->getState()['delay']; 
+        $delayBatch = $form->getState()['delaybatch'];
 
         $totalCust = count($customers);
         $pesanperbatch = ceil($totalCust / $jumlahBatch);
 
         foreach ($customers as $index => $customer) {
+            $currentBatch = intdiv($index, $pesanperbatch);
 
-           $currentBatch = intdiv($index, $pesanperbatch);
-           
-           $messageDelay = $delay * $index;
-           $batchDelay = $currentBatch * $delayBatch * 60;
+            $messageDelay = $delay * $index;
+            $batchDelay = $currentBatch * $delayBatch * 60;
             // $jobs[] = (new SendWhatsAppMessageJob($history->id, $whatsappServer, $customer, $contentPlanner))
             //     ->delay(now()->addSeconds($whatsappServer->delay * $index));
 
-         $jobs[] = (new SendWhatsAppMessageJob($history->id, $whatsappServer, $customer, $contentPlanner))
-            ->delay(now()->addSeconds($messageDelay + $batchDelay));   
+            $jobs[] = (new SendWhatsAppMessageJob($history->id, $whatsappServer, $customer, $contentPlanner))->delay(now()->addSeconds($messageDelay + $batchDelay));
         }
         $batch = Bus::batch($jobs)->dispatch();
         $history->update(['batch_id' => $batch->id]);
@@ -53,12 +56,11 @@ class WhatsappController extends Controller
         $history = History::create([
             'content_planner_id' => $contentPlanner->id,
             'whatsapp_server_id' => $whatsappServer->id,
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]);
 
         foreach ($customers as $index => $customer) {
-            $jobs[] = (new SendWhatsAppMessageMediaJob($history->id, $whatsappServer, $customer, $contentPlanner))
-                ->delay(now()->addSeconds($whatsappServer->delay * $index));
+            $jobs[] = (new SendWhatsAppMessageMediaJob($history->id, $whatsappServer, $customer, $contentPlanner))->delay(now()->addSeconds($whatsappServer->delay * $index));
         }
         $batch = Bus::batch($jobs)->dispatch();
         $history->update(['batch_id' => $batch->id]);
@@ -71,16 +73,18 @@ class WhatsappController extends Controller
         if ($response['code'] == 200) {
             return response()->json([
                 'status' => $response['code'],
-                'qr' => $response['results']['qrString']
+                'qr' => $response['results']['qrString'],
             ]);
         }
         return response()->json([
             'status' => $response['code'],
-            'message' => $response['results']['message']
+            'message' => $response['results']['message'],
         ]);
     }
 
-    public function sendMediaFromUrl() {}
+    public function sendMediaFromUrl()
+    {
+    }
     public function startService($apiKey)
     {
         return $this->whatsAppService->startService($apiKey);
