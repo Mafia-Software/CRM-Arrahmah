@@ -79,16 +79,17 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             '2xl' => 4,
                         ])
                         ->reactive()->required(),
-                    Select::make('selectedWhatsappServer')
-                        ->label('Whatsapp Server')
-                        ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
-                        ->default(null)
-                        ->columnSpan([
-                            'sm' => 12,
-                            'xl' => 6,
-                            '2xl' => 8,
-                        ])
-                        ->reactive()->required(),
+                        // {komen pilih wasap server}
+                    // Select::make('selectedWhatsappServer')
+                    //     ->label('Whatsapp Server')
+                    //     ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
+                    //     ->default(null)
+                    //     ->columnSpan([
+                    //         'sm' => 12,
+                    //         'xl' => 6,
+                    //         '2xl' => 8,
+                    //     ])
+                    //     ->reactive()->required(),
                     TextInput::make('startId')
                         ->label('ID Mulai')
                         ->numeric()
