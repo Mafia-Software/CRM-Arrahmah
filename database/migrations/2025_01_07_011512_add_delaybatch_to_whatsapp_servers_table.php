@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('whatsapp_servers', function (Blueprint $table) {
             //
-             $table->integer('delaybatch');
-            $table->integer('jumlahbatch');
+            $table->integer('delaybatch')->default(5);
+            $table->integer('jumlahbatch')->default(1);
         });
     }
 
