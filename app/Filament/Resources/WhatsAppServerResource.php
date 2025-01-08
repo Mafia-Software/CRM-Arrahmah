@@ -38,9 +38,9 @@ class WhatsAppServerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('no_wa')->label('No. Whatsapp')->required()->numeric(),
-                TextInput::make('delay')->label('Delay')->suffix('Detik'),
-                TextInput::make('delaybatch')->label('Delay/Batch') ->suffix('Menit'),
-                TextInput::make('jumlahbatch')->label('Jumlah Batch'),
+                TextInput::make('delay')->label('Delay')->suffix('Detik')->required()->numeric(),
+                TextInput::make('delaybatch')->label('Delay/Batch')->suffix('Menit')->required()->numeric(),
+                TextInput::make('jumlahbatch')->label('Jumlah Batch')->required()->numeric(),
             ]);
     }
 

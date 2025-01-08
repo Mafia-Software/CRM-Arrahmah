@@ -35,9 +35,7 @@ class HistoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('ID'),
                 TextColumn::make('user.name')->label('Admin'),
-                TextColumn::make('whatsappServer.nama')->label('WA Server'),
                 ProgressColumn::make('progress')->label('Progress')->color('bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500')->progress(function ($record) {
                     return Bus::findBatch($record->batch_id)->progress();
                 }),

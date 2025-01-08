@@ -10,7 +10,6 @@ class PesanMasuk extends Model
 {
     use SoftDeletes;
     use HasFactory;
-
     protected $fillable = [
         'id',
         'wa_server_id',
@@ -20,6 +19,6 @@ class PesanMasuk extends Model
 
     public function whatsappServer()
     {
-        return $this->belongsTo(WhatsAppServer::class);
+        return $this->belongsTo(WhatsappServer::class, 'wa_server_id');
     }
 }
