@@ -21,12 +21,12 @@ class WhatsappController extends Controller
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function sendMessage($whatsappServer, $customers, $contentPlanner)
+    public function sendMessage( $customers, $contentPlanner)
     {
         $jobs = [];
         $history = History::create([
             'content_planner_id' => $contentPlanner->id,
-            'whatsapp_server_id' => $whatsappServer->id,
+            // 'whatsapp_server_id' => $whatsappServer->id,
             'user_id' => Auth::id(),
         ]);
 
