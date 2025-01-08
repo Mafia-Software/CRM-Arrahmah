@@ -27,9 +27,9 @@ class SendWhatsAppMessageJob implements ShouldQueue
     public function __construct($historyId, $whatsappServer, $customer, $contentPlanner)
     {
         $this->api_key = $whatsappServer->api_key;
-        $this->number = $customer->no_wa;
+        $this->number = $customer['no_wa'];
         $this->message = $contentPlanner->pesan;
-        $this->customerId = $customer->id;
+        $this->customerId = $customer['id'];
         $this->historyId = $historyId;
         $this->delayInSeconds = $whatsappServer->delay;
     }
