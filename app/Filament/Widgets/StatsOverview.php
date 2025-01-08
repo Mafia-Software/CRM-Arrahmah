@@ -18,7 +18,7 @@ class StatsOverview extends BaseWidget
     {
         $totalFeedback = PesanMasuk::count();
         $totalTerbaca = PesanKeluar::where('status', 4)->count();
-        $totalTerkirim = PesanKeluar::whereIn('status', [2, 200])->count();
+        $totalTerkirim = PesanKeluar::whereIn('status', [2, 200, 3, 4])->count();
 
         return [
             Stat::make('Feedback', $totalFeedback),
