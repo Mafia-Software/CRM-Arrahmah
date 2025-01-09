@@ -16,7 +16,6 @@ class History extends Model
         'user_id',
         'content_planner_id',
         'batch_id',
-        'whatsapp_server_id',
     ];
 
     public function contentPlanner()

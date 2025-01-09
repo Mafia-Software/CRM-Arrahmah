@@ -37,7 +37,7 @@ class PesanMasukResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->label('ID')->sortable(),
-                TextColumn::make('wa_server_id')->label('WA Server ID'),
+                TextColumn::make('whatsappServer.nama')->label('WA Server'),
                 TextColumn::make('no_wa')->label('No. WhatsApp'),
                 TextColumn::make('pesan')->label('Pesan'),
                 ImageColumn::make('media')->label('Media'),

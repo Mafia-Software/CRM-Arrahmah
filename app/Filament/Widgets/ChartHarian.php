@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\PesanKeluar;
+use App\Models\PesanMasuk;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 
@@ -19,23 +20,33 @@ class ChartHarian extends ChartWidget
 
     protected function getData(): array
     {
-        $data = [];
+        $dailyPesanKeluar = [];
+        $dailyPesanMasuk = [];
         $today = Carbon::today();
         $startOfMonth = $today->copy()->startOfMonth();
 
         for ($day = 1; $day <= $today->daysInMonth; $day++) {
             $date = $startOfMonth->copy()->addDays($day - 1);
             $count = PesanKeluar::whereDate('created_at', $date)->count();
-            $data[] = $count;
+            $dailyPesanKeluar[] = $count;
+        }
+        for ($day = 1; $day <= $today->daysInMonth; $day++) {
+            $date = $startOfMonth->copy()->addDays($day - 1);
+            $count = PesanMasuk::whereDate('created_at', $date)->count();
+            $dailyPesanMasuk[] = $count;
         }
 
         return [
             'datasets' => [
                 [
                     'label' => 'Pesan Keluar',
-                    'data' => $data,
+                    'data' => $dailyPesanKeluar,
                     'borderColor' => 'red',
-
+                ],
+                [
+                    'label' => 'Pesan Masuk',
+                    'data' => $dailyPesanMasuk,
+                    'borderColor' => 'blue',
                 ],
             ],
             'labels' => range(1, $today->daysInMonth),

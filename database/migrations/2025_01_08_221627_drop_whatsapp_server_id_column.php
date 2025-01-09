@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('whatsapp_servers', function (Blueprint $table) {
-            //
-            $table->integer('delaybatch')->default(5);
-            $table->integer('jumlahbatch')->default(1);
+        Schema::table('histories', function (Blueprint $table) {
+            $table->dropColumn(['whatsapp_server_id']);
         });
     }
 
@@ -23,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('whatsapp_servers', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

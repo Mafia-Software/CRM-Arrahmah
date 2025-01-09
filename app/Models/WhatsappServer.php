@@ -14,5 +14,7 @@ class WhatsappServer extends Model
         'api_key',
         'service_status',
         'delay',
+        'delaybatch',
+        'jumlahbatch',
     ];
 }

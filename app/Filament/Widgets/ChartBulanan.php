@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\PesanKeluar;
+use App\Models\PesanMasuk;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 
@@ -19,24 +20,32 @@ class ChartBulanan extends ChartWidget
 
     protected function getData(): array
     {
-        $monthlyData = [];
-
-
+        $monthlyPesanKeluar = [];
+        $monthlyPesanMasuk = [];
         for ($month = 1; $month <= 12; $month++) {
             $startDate = Carbon::create(date('Y'), $month, 1);
             $endDate = $startDate->copy()->endOfMonth();
-
             $count = PesanKeluar::whereBetween('created_at', [$startDate, $endDate])->count();
-            $monthlyData[] = $count;
+            $monthlyPesanKeluar[] = $count;
         }
-
+        for ($month = 1; $month <= 12; $month++) {
+            $startDate = Carbon::create(date('Y'), $month, 1);
+            $endDate = $startDate->copy()->endOfMonth();
+            $countMasuk = PesanMasuk::whereBetween('created_at', [$startDate, $endDate])->count();
+            $monthlyPesanMasuk[] = $countMasuk;
+        }
         return [
             'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // Label untuk bulan
             'datasets' => [
                 [
                     'label' => 'Pesan Keluar',
-                    'data' => $monthlyData,
+                    'data' => $monthlyPesanKeluar,
                     'borderColor' => 'red',
+                ],
+                [
+                    'label' => 'Pesan Masuk',
+                    'data' => $monthlyPesanMasuk,
+                    'borderColor' => 'blue',
                 ],
             ],
         ];

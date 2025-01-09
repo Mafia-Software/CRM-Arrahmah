@@ -79,7 +79,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             '2xl' => 4,
                         ])
                         ->reactive()->required(),
-                        // {komen pilih wasap server}
+                    // {komen pilih wasap server}
                     // Select::make('selectedWhatsappServer')
                     //     ->label('Whatsapp Server')
                     //     ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
@@ -108,9 +108,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             '2xl' => 4,
                         ])
                         ->reactive(),
-
                 ])
-
             ]);
     }
     public $selectedIds = [];
@@ -128,19 +126,19 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
             ->query(function () {
                 return Customer::when(
                     is_null($this->selectedUnitKerja),
-                    fn ($query) => $query,
-                    fn ($query) => $query
+                    fn($query) => $query,
+                    fn($query) => $query
                         ->when(
                             $this->startId && $this->endId,
-                            fn ($query) => $query->whereBetween('id', [$this->startId, $this->endId]),
-                            fn ($query) => $query
+                            fn($query) => $query->whereBetween('id', [$this->startId, $this->endId]),
+                            fn($query) => $query
                         )
                         ->when(
                             $this->selectedUnitKerja && $this->selectedUnitKerja !== 'Semua',
-                            fn ($query) => $query->where('unit_kerja_id', $this->selectedUnitKerja),
-                            fn ($query) => $query
+                            fn($query) => $query->where('unit_kerja_id', $this->selectedUnitKerja),
+                            fn($query) => $query
                         )
-                        );
+                );
             })
             ->actions([
                 // DeleteAction::make()
@@ -157,45 +155,41 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     }
 
     public function sendMessage()
-{
-    if (!$this->getSelectedValidation()) {
-        Notification::make()
-            ->warning()
-            ->title('Validasi Gagal')
-            ->body('Pastikan semua dropdown telah dipilih.')
-            ->send();
-        return;
+    {
+        if (!$this->getSelectedValidation()) {
+            Notification::make()
+                ->warning()
+                ->title('Validasi Gagal')
+                ->body('Pastikan semua dropdown telah dipilih.')
+                ->send();
+            return;
+        }
+
+        $customers = Customer::select('id', 'no_wa');
+        if ($this->selectedUnitKerja) {
+            $customers = $customers->where('unit_kerja_id', $this->selectedUnitKerja);
+        }
+        if ($this->startId && $this->endId) {
+            $customers = $customers->whereBetween('id', [$this->startId, $this->endId]);
+        }
+        $customers = $customers->get();
+        $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
+        switch (is_null($ContentPlanner->media)) {
+            case true:
+                $wa = new WhatsappController(new WhatsappService);
+                $wa->sendMessage($customers, $ContentPlanner);
+                Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
+                break;
+            case false:
+                $wa = new WhatsappController(new WhatsappService);
+                $wa->sendMessageMedia($customers, $ContentPlanner);
+                Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
+                break;
+        }
     }
-
-    $customers = Customer::select('id', 'no_wa')
-
-        ->where('unit_kerja_id', $this->selectedUnitKerja);
-
-    if ($this->startId && $this->endId) {
-        $customers = $customers->whereBetween('id', [$this->startId, $this->endId]);
-    }
-
-    $customers = $customers->get();
-
-    $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
-    $WhatsappServer = WhatsappServer::where('id', $this->selectedWhatsappServer)->first();
-
-    switch (is_null($ContentPlanner->media)) {
-        case true:
-            $wa = new WhatsappController(new WhatsappService);
-            $wa->sendMessage($WhatsappServer, $customers, $ContentPlanner);
-            Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
-            break;
-        case false:
-            $wa = new WhatsappController(new WhatsappService);
-            $wa->sendMessageMedia($WhatsappServer, $customers, $ContentPlanner);
-            Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
-            break;
-    }
-}
 
     public function getSelectedValidation()
     {
-        return  $this->selectedContentPlanner && $this->selectedWhatsappServer;
+        return  $this->selectedContentPlanner;
     }
 }
