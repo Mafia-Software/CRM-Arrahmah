@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /var/www
+cd /home/crm
 
 # php artisan migrate:fresh --seed
 php artisan key:generate

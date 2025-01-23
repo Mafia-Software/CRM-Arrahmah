@@ -1,7 +1,7 @@
 FROM php:8.3.15-fpm
 
 # Set working directory
-WORKDIR /var/www/
+WORKDIR /home/crm/
 
 # Install dependencies
 RUN apt update && apt install -y \
@@ -57,39 +57,22 @@ RUN docker-php-ext-install gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copy project ke dalam container
-COPY . /var/www/
-
-# Copy directory project permission ke container
-COPY --chown=www-data:www-data . /var/www/
-RUN chown -R www-data:www-data /var/www
-RUN chown -R www-data:www-data /var/log/supervisor
+COPY . /home/crm
 
 # Install dependency
 RUN composer install --optimize-autoloader --no-dev
 RUN npm install
 RUN npm run build
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy code to /var/www
-COPY --chown=www:www-data . /var/www
-
-# add root to www group
-RUN chmod -R ug+w /var/www/storage
-
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
 RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
 RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
 
-# PHP Error Log Files
-RUN mkdir /var/log/php
-RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
-
+RUN chown -R www-data:www-data /home/crm
+RUN chmod 755 /home/crm
 # Deployment steps
-RUN chmod +x /var/www/docker/entrypoint.sh
+RUN chmod +x /home/crm/docker/entrypoint.sh
 
 EXPOSE 80
-ENTRYPOINT ["/var/www/docker/entrypoint.sh"]
+ENTRYPOINT ["/home/crm/docker/entrypoint.sh"]
