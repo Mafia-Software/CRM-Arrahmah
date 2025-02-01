@@ -3,15 +3,12 @@
 namespace App\Filament\Pages;
 
 use App\Http\Controllers\API\WhatsappController;
-use App\Models\User;
 use App\Models\Customer;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use App\Models\UnitKerja;
 use Filament\Tables\Table;
 use App\Models\ContentPlanner;
-use App\Models\History;
-use App\Models\WhatsappServer;
 use App\Services\WhatsappService;
 use Filament\Actions\Action as ActionsAction;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -20,13 +17,11 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithRecord;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Notifications\Notification;
-use PhpParser\Node\Stmt\Break_;
 use Filament\Forms\Components\TextInput;
 
 class WABlast extends Page implements HasTable, HasForms, HasActions
@@ -43,9 +38,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     protected static string $view = 'filament.pages.wablast';
 
     public $selectedUnitKerja;
-    public $selectedUser;
     public $selectedContentPlanner;
-    public $selectedWhatsappServer;
     public $startId;
     public $endId;
 
@@ -190,6 +183,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
 
     public function getSelectedValidation()
     {
-        return  $this->selectedContentPlanner;
+        return $this->selectedContentPlanner;
     }
 }
