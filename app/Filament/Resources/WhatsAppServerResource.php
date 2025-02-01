@@ -130,9 +130,9 @@ class WhatsAppServerResource extends Resource
                 ])
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                // BulkActionGroup::make([
+                //     DeleteBulkAction::make(),
+                // ]),
             ])->emptyStateHeading('Belum Ada Whatsapp Server');
     }
 
