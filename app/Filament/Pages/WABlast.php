@@ -70,7 +70,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                         ])
                         ->reactive(),
                     Select::make('selectedContentPlanner')
-                        ->label('Content Planner')
+                        ->label('Content Planner')->searchable()
                         ->options(ContentPlanner::all()->pluck('tanggal', 'id'))
                         ->default(null)
                         ->columnSpan([
@@ -122,7 +122,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                 TextColumn::make('unitKerja.name')->label('Unit Kerja')->searchable(),
                 TextColumn::make('no_wa')->label('No. Whatsapp')->searchable(),
             ])
-            ->emptyStateHeading('Silahkan Pilih Unit Kerja dan User')
+            ->emptyStateHeading('Silahkan Pilih Unit Kerja')
             ->query(function () {
                 return Customer::when(
                     is_null($this->selectedUnitKerja),
