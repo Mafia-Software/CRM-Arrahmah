@@ -117,10 +117,10 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
         return $table
             ->columns([
                 TextColumn::make('id')->label('ID'),
-                TextColumn::make('nama'),
-                TextColumn::make('alamat'),
-                TextColumn::make('unitKerja.name')->label('Unit Kerja'),
-                TextColumn::make('no_wa')->label('No. Whatsapp'),
+                TextColumn::make('nama')->searchable(),
+                TextColumn::make('alamat')->searchable(),
+                TextColumn::make('unitKerja.name')->label('Unit Kerja')->searchable(),
+                TextColumn::make('no_wa')->label('No. Whatsapp')->searchable(),
             ])
             ->emptyStateHeading('Silahkan Pilih Unit Kerja dan User')
             ->query(function () {
