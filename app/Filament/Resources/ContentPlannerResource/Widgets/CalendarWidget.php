@@ -9,8 +9,10 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Filament\Actions\Action;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\ForceDeleteAction;
+use Illuminate\Support\Facades\Storage;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
 use Saade\FilamentFullCalendar\Actions\DeleteAction;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
@@ -76,7 +78,17 @@ class CalendarWidget extends FullCalendarWidget
                         $action->cancel();
                     }
                 }),
-            DeleteAction::make(),
+            Action::make('delete')->label('Hapus')->color('danger')->icon('heroicon-s-trash')->action(
+                function (ContentPlanner $record, $action, FullCalendarWidget $livewire) {
+                    if ($record->media) {
+                        Storage::disk('public')->delete($record->media);
+                    }
+                    $record->forceDelete();
+                    Notification::make()->success()->title('Berhasil')->body('Data Berhasil Dihapus')->send();
+                    $livewire->refreshRecords();
+                    $action->cancelParentActions();
+                }
+            )
         ];
     }
     public function getFormSchema(): array
