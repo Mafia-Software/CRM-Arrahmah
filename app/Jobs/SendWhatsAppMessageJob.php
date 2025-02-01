@@ -20,7 +20,6 @@ class SendWhatsAppMessageJob implements ShouldQueue
     protected $api_key;
     protected $customerId;
     protected $historyId;
-    protected $delayInSeconds;
     /**
      * Create a new job instance.
      */
@@ -31,7 +30,6 @@ class SendWhatsAppMessageJob implements ShouldQueue
         $this->message = $contentPlanner->pesan;
         $this->customerId = $customer['id'];
         $this->historyId = $historyId;
-        $this->delayInSeconds = $whatsappServer->delay;
     }
 
     /**

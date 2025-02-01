@@ -21,7 +21,6 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
     protected $media;
     protected $customerId;
     protected $historyId;
-    protected $delayInSeconds;
     /**
      * Create a new job instance.
      */
@@ -33,7 +32,6 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
         $this->media = $contentPlanner->media;
         $this->customerId = $customer['id'];
         $this->historyId = $historyId;
-        $this->delayInSeconds = $whatsappServer->delay;
     }
 
     /**
