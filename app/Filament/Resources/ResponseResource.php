@@ -17,6 +17,8 @@ use App\Filament\Resources\ResponseResource\Pages;
 class ResponseResource extends Resource
 {
     protected static ?string $model = Response::class;
+
+    protected static bool $shouldRegisterNavigation = false;
     protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'bi-graph-up-arrow';
     protected static ?string $navigationGroup = 'Master Data';
