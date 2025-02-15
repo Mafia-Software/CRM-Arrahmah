@@ -2,27 +2,28 @@
 
 namespace App\Filament\Pages;
 
-use App\Http\Controllers\API\WhatsappController;
 use App\Models\Customer;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use App\Models\UnitKerja;
 use Filament\Tables\Table;
 use App\Models\ContentPlanner;
+use App\Models\WhatsappServer;
 use App\Services\WhatsappService;
-use Filament\Actions\Action as ActionsAction;
-use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\Action as ActionsAction;
 use Filament\Forms\Concerns\InteractsWithForms;
+use App\Http\Controllers\API\WhatsappController;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithRecord;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Notifications\Notification;
-use Filament\Forms\Components\TextInput;
+use Filament\Actions\Concerns\InteractsWithActions;
 
 class WABlast extends Page implements HasTable, HasForms, HasActions
 {
@@ -73,16 +74,16 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                         ])
                         ->reactive()->required(),
                     // {komen pilih wasap server}
-                    // Select::make('selectedWhatsappServer')
-                    //     ->label('Whatsapp Server')
-                    //     ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
-                    //     ->default(null)
-                    //     ->columnSpan([
-                    //         'sm' => 12,
-                    //         'xl' => 6,
-                    //         '2xl' => 8,
-                    //     ])
-                    //     ->reactive()->required(),
+                    Select::make('selectedWhatsappServer')
+                        ->label('Whatsapp Server')
+                        ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
+                        ->default(null)
+                        ->columnSpan([
+                            'sm' => 12,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])
+                        ->reactive()->required(),
                     TextInput::make('startId')
                         ->label('ID Mulai')
                         ->numeric()
@@ -183,6 +184,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
 
     public function getSelectedValidation()
     {
-        return $this->selectedContentPlanner;
+        return $this->selectedContentPlanner && $this->selectedWhatsappServer;
     }
 }
