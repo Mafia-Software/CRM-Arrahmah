@@ -20,10 +20,10 @@ class WhatsappController extends Controller
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function sendMessage($customers, $contentPlanner)
+    public function sendMessage($customers, $contentPlanner, $whatsappServer)
     {
         $jobs = [];
-        $wangsaffaktif = WhatsappServer::where('service_status', 'CONNECTED')->get();
+        $wangsaffaktif = WhatsappServer::where('service_status', 'CONNECTED')->where('id', $whatsappServer)->get();
         $history = History::create([
             'content_planner_id' => $contentPlanner->id,
             'user_id' => Auth::id(),
@@ -93,10 +93,10 @@ class WhatsappController extends Controller
         //     $history->update(['batch_id' => $batch->id]);
         //     return response()->json(['status' => true, 'message' => 'Pesan Berhasil Diproses']);
     }
-    public function sendMessageMedia($customers, $contentPlanner)
+    public function sendMessageMedia($customers, $contentPlanner, $whastappServer)
     {
         $jobs = [];
-        $wangsaffaktif = WhatsappServer::where('service_status', 'CONNECTED')->get();
+        $wangsaffaktif = WhatsappServer::where('service_status', 'CONNECTED')->where('id', $whatsappServer)->get();
         $history = History::create([
             'content_planner_id' => $contentPlanner->id,
             'user_id' => Auth::id(),
