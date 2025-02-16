@@ -21,6 +21,7 @@ class CustomerImporter extends Importer
             ImportColumn::make('alamat')
                 ->rules(['max:255'])->ignoreBlankState(),
             ImportColumn::make('no_wa')
+                ->label('No. Whatsapp')
                 ->requiredMapping()
                 ->rules(['required', 'max:255'])->castStateUsing(function (string $state): ?string {
                     if (blank($state)) {
@@ -49,13 +50,11 @@ class CustomerImporter extends Importer
         return Customer::firstOrNew([
             'no_wa' => $this->data['no_wa'],
         ]);
-
-        //return new Customer();
     }
 
     public function getJobRetryUntil(): ?CarbonInterface
     {
-        return now()->addMinutes(1);
+        return now()->addMinutes(10);
     }
 
     public static function getCompletedNotificationBody(Import $import): string
