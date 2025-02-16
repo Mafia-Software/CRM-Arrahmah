@@ -114,7 +114,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                 TextColumn::make('unitKerja.name')->label('Unit Kerja')->searchable(),
                 TextColumn::make('no_wa')->label('No. Whatsapp')->searchable(),
             ])
-            ->emptyStateHeading('Silahkan Isi Form Terlebih Dahulu')
+            ->emptyStateHeading('Tidak ada Data')
             ->query(function () {
                 return Customer::when(
                     is_null($this->selectedUnitKerja),

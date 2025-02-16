@@ -4,7 +4,6 @@ namespace App\Filament\Imports;
 
 use App\Models\Customer;
 use App\Models\UnitKerja;
-use Carbon\CarbonInterface;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
@@ -50,11 +49,6 @@ class CustomerImporter extends Importer
         return Customer::firstOrNew([
             'no_wa' => $this->data['no_wa'],
         ]);
-    }
-
-    public function getJobRetryUntil(): ?CarbonInterface
-    {
-        return now()->addMinutes(10);
     }
 
     public static function getCompletedNotificationBody(Import $import): string
