@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('histories', function (Blueprint $table) {
-            $table->dropColumn(['whatsapp_server_id']);
+            $table->timestamp('eta')->nullable();
         });
     }
 

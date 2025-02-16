@@ -39,6 +39,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     protected static string $view = 'filament.pages.wablast';
 
     public $selectedUnitKerja;
+    public $selectedWhatsappServer;
     public $selectedContentPlanner;
     public $startId;
     public $endId;
@@ -52,7 +53,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                     'xl' => 6,
                     '2xl' => 8,
                 ])->schema([
-
                     Select::make('selectedUnitKerja')
                         ->label('Unit Kerja')
                         ->options(UnitKerja::all()->pluck('name', 'id'))
@@ -73,7 +73,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             '2xl' => 4,
                         ])
                         ->reactive()->required(),
-                    // {komen pilih wasap server}
                     Select::make('selectedWhatsappServer')
                         ->label('Whatsapp Server')
                         ->options(WhatsappServer::query()->where('service_status', 'CONNECTED')->pluck('nama', 'id'))
@@ -105,7 +104,6 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                 ])
             ]);
     }
-    public $selectedIds = [];
     public function table(Table $table): Table
     {
         return $table
@@ -116,7 +114,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                 TextColumn::make('unitKerja.name')->label('Unit Kerja')->searchable(),
                 TextColumn::make('no_wa')->label('No. Whatsapp')->searchable(),
             ])
-            ->emptyStateHeading('Silahkan Pilih Unit Kerja')
+            ->emptyStateHeading('Silahkan Isi Form Terlebih Dahulu')
             ->query(function () {
                 return Customer::when(
                     is_null($this->selectedUnitKerja),
@@ -133,13 +131,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             fn($query) => $query
                         )
                 );
-            })
-            ->actions([
-                // DeleteAction::make()
-                //     ->action(function (DeleteAction $action) use ($table) {
-                //         $recordId = $action->getRecord()->id;
-                //     }),
-            ]);
+            });
     }
     public function sendAction()
     {
@@ -168,15 +160,16 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
         }
         $customers = $customers->get();
         $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
+        $whatsappServer = WhatsappServer::where('id', $this->selectedWhatsappServer)->first();
         switch (is_null($ContentPlanner->media)) {
             case true:
                 $wa = new WhatsappController(new WhatsappService);
-                $wa->sendMessage($customers, $ContentPlanner);
+                $wa->sendMessage($customers, $ContentPlanner, $whatsappServer);
                 Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
                 break;
             case false:
                 $wa = new WhatsappController(new WhatsappService);
-                $wa->sendMessageMedia($customers, $ContentPlanner);
+                $wa->sendMessageMedia($customers, $ContentPlanner, $whatsappServer);
                 Notification::make()->success()->title('Berhasil')->body('Pesan Berhasil Diproses')->send();
                 break;
         }

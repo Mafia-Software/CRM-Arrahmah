@@ -26,7 +26,7 @@ class SendWhatsAppMessageMediaJob implements ShouldQueue
      */
     public function __construct($historyId, $whatsappServer, $customer, $contentPlanner)
     {
-        $this->api_key = $whatsappServer->api_key;
+        $this->api_key = $whatsappServer;
         $this->number = $customer['no_wa'];
         $this->message = $contentPlanner->pesan;
         $this->media = $contentPlanner->media;
