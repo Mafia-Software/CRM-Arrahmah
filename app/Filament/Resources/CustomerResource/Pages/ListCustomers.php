@@ -18,7 +18,7 @@ class ListCustomers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            ImportAction::make('import')->label('Import Donatur DB')->importer(CustomerImporter::class),
+            ImportAction::make('import')->label('Import Donatur DB')->importer(CustomerImporter::class)->chunkSize(100),
             CreateAction::make()->label('Tambah Customer'),
         ];
     }
