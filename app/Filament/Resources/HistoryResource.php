@@ -36,11 +36,11 @@ class HistoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')->label('Admin'),
-                ProgressColumn::make('progress')->label('Progress')->color('bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500')->progress(function ($record) {
+                ProgressColumn::make('progress')->label('Progress')->color('success')->progress(function ($record) {
                     return Bus::findBatch($record->batch_id)->progress();
                 }),
                 TextColumn::make('whatsappServer.nama')->label('WA Server'),
-                TextColumn::make('contentPlanner.pesan')->label('Pesan')->limit(100),
+                TextColumn::make('contentPlanner.pesan')->label('Pesan')->limit(20),
                 TextColumn::make('created_at')->label('Tanggal'),
             ])->defaultSort('created_at', 'desc')
             ->filters([
