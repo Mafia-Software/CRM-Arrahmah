@@ -21,9 +21,11 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Actions\Action as ActionsAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Http\Controllers\API\WhatsappController;
+use App\Models\OrderedData;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithRecord;
 use Filament\Actions\Concerns\InteractsWithActions;
+use Illuminate\Support\Facades\DB;
 
 class WABlast extends Page implements HasTable, HasForms, HasActions
 {
@@ -62,7 +64,8 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                             'xl' => 3,
                             '2xl' => 4,
                         ])
-                        ->reactive(),
+                        ->reactive()
+                        ->required(),
                     Select::make('selectedContentPlanner')
                         ->label('Content Planner')->searchable()
                         ->options(ContentPlanner::all()->pluck('tanggal', 'id'))
@@ -84,7 +87,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                         ])
                         ->reactive()->required(),
                     TextInput::make('startId')
-                        ->label('ID Mulai')
+                        ->label('Nomor Mulai')
                         ->numeric()
                         ->columnSpan([
                             'sm' => 2,
@@ -93,7 +96,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
                         ])
                         ->reactive(),
                     TextInput::make('endId')
-                        ->label('ID Akhir')
+                        ->label('Nomor Akhir')
                         ->numeric()
                         ->columnSpan([
                             'sm' => 2,
@@ -108,7 +111,7 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('ID'),
+                TextColumn::make('No')->label('No')->rowIndex(),
                 TextColumn::make('nama')->searchable(),
                 TextColumn::make('alamat')->searchable(),
                 TextColumn::make('unitKerja.name')->label('Unit Kerja')->searchable(),
@@ -116,21 +119,23 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
             ])
             ->emptyStateHeading('Tidak ada Data')
             ->query(function () {
-                return Customer::when(
-                    is_null($this->selectedUnitKerja),
-                    fn($query) => $query,
-                    fn($query) => $query
-                        ->when(
-                            $this->startId && $this->endId,
-                            fn($query) => $query->whereBetween('id', [$this->startId, $this->endId]),
-                            fn($query) => $query
-                        )
-                        ->when(
-                            $this->selectedUnitKerja && $this->selectedUnitKerja !== 'Semua',
-                            fn($query) => $query->where('unit_kerja_id', $this->selectedUnitKerja),
-                            fn($query) => $query
-                        )
-                );
+                $viewQuery = DB::table('ordered_data');
+                $viewQuery->where('unit_kerja_id', $this->selectedUnitKerja);
+
+                if ($this->startId && $this->endId) {
+                    $viewQuery->where('unit_kerja_index', '>=', $this->startId);
+                    $viewQuery->where('unit_kerja_index', '<=', $this->endId);
+                }
+
+                $customerIds = $viewQuery->pluck('id')->toArray();
+                $customerQuery = Customer::query();
+
+                if (!empty($customerIds)) {
+                    $customerQuery->whereIn('id', $customerIds);
+                } else {
+                    $customerQuery->whereRaw('1=0');
+                }
+                return $customerQuery;
             });
     }
     public function sendAction()
@@ -151,13 +156,15 @@ class WABlast extends Page implements HasTable, HasForms, HasActions
             return;
         }
 
-        $customers = Customer::select('id', 'no_wa');
-        if ($this->selectedUnitKerja) {
-            $customers = $customers->where('unit_kerja_id', $this->selectedUnitKerja);
-        }
+        $customers = OrderedData::select('id', 'no_wa');
+
+        $customers = $customers->where('unit_kerja_id', $this->selectedUnitKerja);
+
         if ($this->startId && $this->endId) {
-            $customers = $customers->whereBetween('id', [$this->startId, $this->endId]);
+            $customers = $customers->where('unit_kerja_index', '>=', $this->startId);
+            $customers = $customers->where('unit_kerja_index', '<=', $this->endId);
         }
+
         $customers = $customers->get();
         $ContentPlanner = ContentPlanner::where('id', $this->selectedContentPlanner)->first();
         $whatsappServer = WhatsappServer::where('id', $this->selectedWhatsappServer)->first();
