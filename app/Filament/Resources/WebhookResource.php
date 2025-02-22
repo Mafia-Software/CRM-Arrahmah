@@ -14,6 +14,7 @@ use App\Filament\Resources\WebhookResource\Pages;
 
 class WebhookResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
     protected static ?string $model = Log::class;
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 3;
