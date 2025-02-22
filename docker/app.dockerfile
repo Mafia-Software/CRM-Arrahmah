@@ -1,4 +1,4 @@
-FROM php:8.3.15-fpm
+FROM php:8.4.4-fpm
 
 # Set working directory
 WORKDIR /home/crm/
