@@ -6,7 +6,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use App\Filament\Resources\ContentPlannerResource\Pages;
 use App\Filament\Resources\ContentPlannerResource\Widgets\CalendarWidget;
-use Filament\Tables\Table;
 
 class ContentPlannerResource extends Resource
 {
@@ -17,10 +16,6 @@ class ContentPlannerResource extends Resource
     {
         return $form;
     }
-    // public static function table(Table $table): Table
-    // {
-    //     return $table;
-    // }
 
     public static function getWidgets(): array
     {
