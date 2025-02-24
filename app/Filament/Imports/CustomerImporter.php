@@ -61,4 +61,8 @@ class CustomerImporter extends Importer
 
         return $body;
     }
+    public function getJobQueue(): ?string
+    {
+        return 'imports';
+    }
 }
