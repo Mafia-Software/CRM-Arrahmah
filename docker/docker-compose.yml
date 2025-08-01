@@ -1,0 +1,54 @@
+# docker/docker-compose.prod.yml
+# For deploying to a host with existing MySQL and Nginx.
+
+services:
+    # Application Service (Laravel)
+    app:
+        build:
+            context: ..
+            dockerfile: docker/Dockerfile
+            args:
+                - uid=${UID:-1000}
+                - user=${USER:-sail}
+        image: laravel-app-prod
+        container_name: laravel_app_prod
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - ../:/var/www/html
+        # Expose the PHP-FPM port to the host machine
+        ports:
+            - "9000:9000"
+        networks:
+            - laravel
+        # This allows the container to connect to services on the host machine
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    # Supervisor Worker Service
+    worker:
+        build:
+            context: ..
+            dockerfile: docker/Dockerfile
+            args:
+                - uid=${UID:-1000}
+                - user=${USER:-sail}
+        image: laravel-app-prod
+        container_name: laravel_worker_prod
+        restart: unless-stopped
+        command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf
+        volumes:
+            - ../:/var/www/html
+            - ./supervisor.conf:/etc/supervisor/conf.d/supervisor.conf
+        networks:
+            - laravel
+        depends_on:
+            - app
+        # This also needs to connect to the host database
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+# Docker Networks
+networks:
+    laravel:
+        driver: bridge

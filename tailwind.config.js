@@ -5,17 +5,6 @@ import typography from "@tailwindcss/typography";
 
 const colors = require("tailwindcss/colors");
 
-module.exports = {
-    theme: {
-        extend: {
-            colors: {
-                primary: colors.blue,
-                secondary: colors.gray,
-            },
-        },
-    },
-};
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
@@ -30,13 +19,14 @@ module.exports = {
 
     theme: {
         extend: {
+            colors: {
+                primary: colors.blue,
+                secondary: colors.gray,
+            },
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
         },
     },
-    plugins: [
-        require("@tailwindcss/forms"),
-        require("@tailwindcss/typography"),
-    ],
+    plugins: [forms, typography],
 };
