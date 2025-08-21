@@ -120,7 +120,7 @@ class WhatsappController extends Controller
         if (200 == $response['code']) {
             $state = $this->whatsAppService->getState($apiKey);
             if (200 == $state['code']) {
-                WhatsappServer::where('api_key', $apiKey)->update(['service_status' => $state['results']['status']]);
+                WhatsappServer::where('api_key', $apiKey)->update(['service_status' => $state['results']['state']]);
             }
 
             return response()->json(['status' => true, 'message' => 'Service started successfully']);
@@ -148,7 +148,7 @@ class WhatsappController extends Controller
         if (200 == $response['code']) {
             $state = $this->whatsAppService->getState($apiKey);
             if (200 == $state['code']) {
-                WhatsappServer::where('api_key', $apiKey)->update(['service_status' => $state['results']['status']]);
+                WhatsappServer::where('api_key', $apiKey)->update(['service_status' => $state['results']['state']]);
             }
 
             return response()->json(['status' => true, 'message' => 'Service stopped successfully']);
