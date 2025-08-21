@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendWhatsAppMessageJob;
 use App\Jobs\SendWhatsAppMessageMediaJob;
 use App\Models\History;
-use App\Models\WhatsappServer;
 use App\Services\WhatsappService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
@@ -116,17 +115,7 @@ class WhatsappController extends Controller
 
     public function startService($apiKey)
     {
-        $response = $this->whatsAppService->startService($apiKey);
-        if (200 == $response['code']) {
-            $state = $this->whatsAppService->getState($apiKey);
-            if (200 == $state['code']) {
-                WhatsappServer::where('api_key', $apiKey)->update(['service_status' => $state['results']['state']]);
-            }
-
-            return response()->json(['status' => true, 'message' => 'Service started successfully']);
-        }
-
-        return $response;
+        return $this->whatsAppService->startService($apiKey);
     }
 
     public function getState($apiKey)
@@ -144,17 +133,7 @@ class WhatsappController extends Controller
 
     public function stopService($apiKey)
     {
-        $response = $this->whatsAppService->stopService($apiKey);
-        if (200 == $response['code']) {
-            $state = $this->whatsAppService->getState($apiKey);
-            if (200 == $state['code']) {
-                WhatsappServer::where('api_key', $apiKey)->update(['service_status' => $state['results']['state']]);
-            }
-
-            return response()->json(['status' => true, 'message' => 'Service stopped successfully']);
-        }
-
-        return $response;
+        return $this->whatsAppService->stopService($apiKey);
     }
 
     public function searchIdfromArray($response, $apiKey)
