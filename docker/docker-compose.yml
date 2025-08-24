@@ -1,0 +1,94 @@
+# docker/docker-compose.yml
+# This file orchestrates the multi-container Docker application.
+# It is intended to be run from within the 'docker' subdirectory.
+
+version: '3.8'
+
+services:
+    # Application Service (Laravel)
+    app:
+        build:
+            context: .. # The build context is the parent directory (project root)
+            dockerfile: docker/Dockerfile # Path to Dockerfile relative to the context
+            args:
+                - uid=${UID:-1000}
+                - user=${USER:-sail}
+        image: laravel-app
+        container_name: laravel_app
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - ../:/var/www/html # Mount the entire project root directory
+        networks:
+            - laravel
+
+    # Nginx Service
+    nginx:
+        image: nginx:alpine
+        container_name: laravel_nginx
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - ../:/var/www/html # Mount the project root
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf # Path is relative to this file
+        networks:
+            - laravel
+        depends_on:
+            - app
+
+    # MySQL Database Service
+    db:
+        image: mysql:8.0
+        container_name: laravel_db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-userpassword}
+            MYSQL_USER: ${DB_USERNAME:-user}
+        volumes:
+            - db_data:/var/lib/mysql
+        networks:
+            - laravel
+
+    # Redis Service
+    redis:
+        image: redis:alpine
+        container_name: laravel_redis
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        networks:
+            - laravel
+
+    # Supervisor Worker Service
+    worker:
+        build:
+            context: .. # The build context is the parent directory (project root)
+            dockerfile: docker/Dockerfile # Path to Dockerfile relative to the context
+            args:
+                - uid=${UID:-1000}
+                - user=${USER:-sail}
+        image: laravel-app # Reusing the same image as the application
+        container_name: laravel_worker
+        restart: unless-stopped
+        command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf
+        volumes:
+            - ../:/var/www/html # Mount the project root
+            - ./supervisor.conf:/etc/supervisor/conf.d/supervisor.conf # Path is relative to this file
+        networks:
+            - laravel
+        depends_on:
+            - app
+            - redis
+
+# Docker Networks
+networks:
+    laravel:
+        driver: bridge
+
+# Volumes
+volumes:
+    db_data:
+        driver: local
