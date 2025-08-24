@@ -2,19 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Tables;
-use Filament\Forms\Form;
-
-use App\Models\PesanMasuk;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\RestoreAction;
-use Filament\Tables\Actions\ForceDeleteAction;
 use App\Filament\Resources\PesanMasukResource\Pages;
-
+use App\Models\PesanMasuk;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class PesanMasukResource extends Resource
 {
@@ -36,22 +37,26 @@ class PesanMasukResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('ID')->sortable(),
                 TextColumn::make('whatsappServer.nama')->label('WA Server'),
                 TextColumn::make('no_wa')->label('No. WhatsApp'),
-                TextColumn::make('pesan')->label('Pesan'),
+                TextColumn::make('pesan')->label('Pesan')->limit(50),
                 ImageColumn::make('media')->label('Media'),
                 TextColumn::make('created_at')->label('Dibuat')->dateTime(),
             ])->defaultSort('created_at', 'desc')
             ->filters([])
             ->actions([
+                ViewAction::make()->form([
+                    TextInput::make('no_wa')->label('No. WhatsApp'),
+                    Textarea::make('pesan')->label('Pesan'),
+                ]),
                 DeleteAction::make(),
                 RestoreAction::make(),
                 ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ])->emptyStateHeading('Belum Ada Pesan');
+            ])->emptyStateHeading('Belum Ada Pesan')
+        ;
     }
 
     public static function getPages(): array
