@@ -1,25 +1,23 @@
 <?php
 
-namespace App\Filament\Resources\ContentPlannerResource\Widgets;
+namespace App\Filament\Widgets;
 
-use Filament\Forms\Form;
 use App\Models\ContentPlanner;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Notifications\Notification;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
-use Filament\Actions\Action;
-use Filament\Tables\Actions\RestoreAction;
-use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Saade\FilamentFullCalendar\Actions\CreateAction;
-use Saade\FilamentFullCalendar\Actions\DeleteAction;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
-    public Model | string | null $model = ContentPlanner::class;
+    public null|Model|string $model = ContentPlanner::class;
+
     public function fetchEvents(array $fetchInfo): array
     {
         return ContentPlanner::query()
@@ -34,26 +32,46 @@ class CalendarWidget extends FullCalendarWidget
                     ];
                 }
             )
-            ->all();
+            ->all()
+        ;
     }
-    function whatsappToHtml($text)
+
+    public function whatsappToHtml($text)
     {
         $text = preg_replace('/\*(.+?)\*/', '$1', $text);
         $text = preg_replace('/_(.+?)_/', '$1', $text);
-        $text = preg_replace('/~(.*?)~/', '$1', $text);
-        return $text;
+
+        return preg_replace('/~(.*?)~/', '$1', $text);
     }
-    function htmlToWhatsapp($text)
+
+    public function htmlToWhatsapp($text)
     {
         $markdown = str_replace(['<strong>', '</strong>'], ['*', '*'], $text);
         $markdown = str_replace(['<em>', '</em>'], ['_', '_'], $markdown);
         $markdown = str_replace(['<del>', '</del>'], ['~', '~'], $markdown);
-        $markdown = str_replace(['<p>', '</p>'], ["", "\n"], $markdown);
+        $markdown = str_replace(['<p>', '</p>'], ['', "\n"], $markdown);
         $markdown = str_replace(['<br>'], ["\n"], $markdown);
-        $markdown = str_replace(['&nbsp;'], [""], $markdown);
+        $markdown = str_replace(['&nbsp;'], [''], $markdown);
 
-        $markdown = rtrim($markdown, "\n");
-        return $markdown;
+        return rtrim($markdown, "\n");
+    }
+
+    public function getFormSchema(): array
+    {
+        return [
+            RichEditor::make('pesan')->required()->toolbarButtons([
+                'bold',
+                'italic',
+                'strike',
+            ]),
+            FileUpload::make('media')
+                ->directory('media')
+                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'video/mp4'])
+                ->imageEditor()
+                ->visibility('public')
+                ->uploadingMessage('Mengupload Media...'),
+            DatePicker::make('tanggal')->required()->readOnly(),
+        ];
     }
 
     protected function modalActions(): array
@@ -69,6 +87,7 @@ class CalendarWidget extends FullCalendarWidget
                 )->createAnother(false)->mutateFormDataUsing(
                     function (array $data): array {
                         $data['pesan'] = $this->htmlToWhatsapp($data['pesan']);
+
                         return $data;
                     }
                 )->before(function ($data, $action) {
@@ -88,26 +107,10 @@ class CalendarWidget extends FullCalendarWidget
                     $livewire->refreshRecords();
                     $action->cancelParentActions();
                 }
-            )
+            ),
         ];
     }
-    public function getFormSchema(): array
-    {
-        return [
-            RichEditor::make('pesan')->required()->toolbarButtons([
-                'bold',
-                'italic',
-                'strike'
-            ]),
-            FileUpload::make('media')
-                ->directory('media')
-                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'video/mp4'])
-                ->imageEditor()
-                ->visibility('public')
-                ->uploadingMessage('Mengupload Media...'),
-            DatePicker::make('tanggal')->required()->readOnly(),
-        ];
-    }
+
     protected function headerActions(): array
     {
         return [];

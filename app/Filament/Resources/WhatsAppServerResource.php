@@ -18,11 +18,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 
-
 class WhatsAppServerResource extends Resource
 {
     protected static ?string $model = WhatsappServer::class;
-    protected static ?string $navigationLabel = "Whatsapp Server";
+    protected static ?string $navigationLabel = 'Whatsapp Server';
     protected static ?string $slug = 'whatsapp-servers';
 
     protected static ?int $navigationSort = 2;
@@ -39,7 +38,8 @@ class WhatsAppServerResource extends Resource
                 TextInput::make('delay')->label('Delay')->suffix('Detik')->required()->numeric(),
                 TextInput::make('delaybatch')->label('Delay/Batch')->suffix('Menit')->required()->numeric(),
                 TextInput::make('jumlahbatch')->label('Jumlah Batch')->required()->numeric(),
-            ]);
+            ])
+        ;
     }
 
     public static function table(Table $table): Table
@@ -51,7 +51,7 @@ class WhatsAppServerResource extends Resource
                 TextColumn::make('delay')->suffix(' detik'),
                 TextColumn::make('delaybatch')->label('Delay/Batch')->suffix(' menit'),
                 TextColumn::make('jumlahbatch')->label('Jumlah Batch'),
-                TextColumn::make('service_status')->label('Status')->badge()->color(fn(string $state): string => match ($state) {
+                TextColumn::make('service_status')->label('Status')->badge()->color(fn (string $state): string => match ($state) {
                     'SERVICE_OFF' => 'gray',
                     'PAIRING' => 'warning',
                     'SERVICE_SCAN' => 'warning',
@@ -71,7 +71,7 @@ class WhatsAppServerResource extends Resource
                         })->after(function ($record) {
                             $record->refresh();
                         })
-                        ->hidden(fn($record) => $record->service_status !== 'SERVICE_OFF'),
+                        ->hidden(fn ($record) => 'SERVICE_OFF' !== $record->service_status),
                     Action::make('pair')
                         ->label('Scan QR')
                         ->color('gray')
@@ -79,30 +79,33 @@ class WhatsAppServerResource extends Resource
                         ->modalContent(function ($record): View {
                             $wa = new WhatsappController(new WhatsappService());
                             $qr = $wa->getQR($record->api_key);
-                            if ($qr->getData()->status == 200) {
+                            if (200 == $qr->getData()->status) {
                                 $qrCode = substr($qr->getData()->qr, strpos($qr->getData()->qr, ',') + 1);
                                 session()->put('qr', $qrCode);
                                 $qrCode = session()->get('qr');
                                 session()->forget('qr');
+
                                 return view('filament.pages.components.qr-modal', ['qr' => $qrCode]);
-                            } else {
-                                Notification::make()
-                                    ->title('Gagal Mendapatkan QR')
-                                    ->body($qr->getData()->message)
-                                    ->danger()
-                                    ->send();
-                                session()->put('qr', $qr->getData()->message);
-                                $message = session()->get('qr');
-                                session()->forget('qr');
-                                return view('filament.pages.components.qr-modal', ['message' => $message]);
                             }
+                            Notification::make()
+                                ->title('Gagal Mendapatkan QR')
+                                ->body($qr->getData()->message)
+                                ->danger()
+                                ->send()
+                            ;
+                            session()->put('qr', $qr->getData()->message);
+                            $message = session()->get('qr');
+                            session()->forget('qr');
+
+                            return view('filament.pages.components.qr-modal', ['message' => $message]);
                         })->modalAlignment('center')
                         ->modalWidth('sm')
                         ->modalSubmitAction(false)
                         ->modalCancelAction(false)
                         ->hidden(function ($record) {
-                            if ($record->service_status != 'SERVICE_SCAN' && $record->service_status != 'PAIRING')
+                            if ('SERVICE_SCAN' != $record->service_status && 'PAIRING' != $record->service_status) {
                                 return true;
+                            }
                         }),
                     Action::make('stop')
                         ->label('Hentikan')
@@ -115,29 +118,28 @@ class WhatsAppServerResource extends Resource
                         ->after(function ($record) {
                             $record->refresh();
                         })
-                        ->hidden(fn($record) => $record->service_status === 'SERVICE_OFF'),
+                        ->hidden(fn ($record) => 'SERVICE_OFF' === $record->service_status),
                     EditAction::make(),
                     DeleteAction::make()->before(function (DeleteAction $action, $record) {
                         $wa = new WhatsappController(new WhatsappService());
                         $res = $wa->deleteDevice($record->api_key);
-                        if ($res->getData()->status != true) {
+                        if (true != $res->getData()->status) {
                             Notification::make()->danger()->title('Error')->body($res->getData()->message)->send();
                             $action->cancel();
                         }
                     }),
-                ])
+                ]),
             ])
-            ->bulkActions([
-                // BulkActionGroup::make([
-                //     DeleteBulkAction::make(),
-                // ]),
-            ])->emptyStateHeading('Belum Ada Whatsapp Server');
+            ->bulkActions([])
+            ->emptyStateHeading('Belum Ada Whatsapp Server')
+        ;
     }
 
     public static function getRelations(): array
     {
         return [];
     }
+
     public static function getPages(): array
     {
         return [

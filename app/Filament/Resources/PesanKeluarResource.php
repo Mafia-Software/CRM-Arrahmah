@@ -4,15 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PesanKeluarResource\Pages;
 use App\Models\PesanKeluar;
-use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-
 
 class PesanKeluarResource extends Resource
 {
@@ -38,12 +35,12 @@ class PesanKeluarResource extends Resource
                 TextColumn::make('history_id')
                     ->searchable()->label('History'),
                 TextColumn::make('status')
-                    ->label('Status')->badge()->color(fn(string $state): string => match ($state) {
+                    ->label('Status')->badge()->color(fn (string $state): string => match ($state) {
                         'Terkirim' => 'warning',
                         'Terkirim & Masuk' => 'warning',
                         'Terbaca' => 'success',
                         'Error' => 'danger',
-                    })->getStateUsing(fn($record) => match ($record->status) {
+                    })->getStateUsing(fn ($record) => match ($record->status) {
                         '200' => 'Terkirim',
                         '2' => 'Terkirim',
                         '3' => 'Terkirim & Masuk',
@@ -56,19 +53,18 @@ class PesanKeluarResource extends Resource
                     ->label('Tanggal'),
             ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+        ;
     }
 
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 
